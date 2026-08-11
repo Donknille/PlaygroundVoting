@@ -1,0 +1,17 @@
+{
+  "name": "Spielplatz-Scouts",
+  "short_name": "Scouts",
+  "description": "Spielplätze in der Nähe finden – bewertet von Kindern.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#fff8ec",
+  "theme_color": "#f59f0b",
+  "lang": "de",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

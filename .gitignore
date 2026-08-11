@@ -1,0 +1,12 @@
+node_modules/
+.next/
+out/
+.env*.local
+.DS_Store
+*.tsbuildinfo
+next-env.d.ts
+.firebase/
+.firebaserc
+
+# Verifikations-Screenshots aus der Entwicklung (die README nutzt docs/screenshots/)
+/screenshots/
