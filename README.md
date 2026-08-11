@@ -91,18 +91,24 @@ Kein Server, keine Datenbank, keine laufenden Kosten.
 
 ## Deployment auf Google Cloud
 
-### Variante A — Firebase Hosting (empfohlen, Spark-Tarif = 0 €)
+### Variante A — Firebase Hosting (empfohlen, Spark-Tarif = 0 €, keine Kreditkarte)
+
+📘 **[Ausführliche Schritt-für-Schritt-Anleitung](docs/DEPLOYMENT-FIREBASE.md)** — vom leeren
+Google-Konto bis zur öffentlichen Adresse, inklusive Prüfliste und Fehlerbehebung.
+
+Kurzfassung, wenn du Firebase schon kennst:
 
 ```bash
 npm install -g firebase-tools
 firebase login
-cp .firebaserc.example .firebaserc     # Projekt-ID eintragen
-npm run build
+firebase use --add            # Projekt wählen, Alias "default"
 firebase deploy --only hosting
 ```
 
 `firebase.json` liegt fertig konfiguriert bei: `out/` als Wurzel, `trailingSlash`, Cache-Header
-für `/_next/static/**` und `no-cache` für den Service Worker.
+für `/_next/static/**`, `no-cache` für den Service Worker und ein `predeploy`-Haken, der
+`npm run build` vor jedem Deploy ausführt. **`firebase init` nicht ausführen** — es würde diese
+Konfiguration überschreiben.
 
 ### Variante B — Cloud Run (nginx-Container)
 
