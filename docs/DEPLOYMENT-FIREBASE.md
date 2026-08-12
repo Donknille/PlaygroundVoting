@@ -476,6 +476,20 @@ firebase login
 
 und dabei das richtige Konto wählen.
 
+### „Module not found: Can't resolve …" beim Deploy
+
+Der Code bringt eine neue Abhängigkeit mit, die auf deinem Rechner noch nicht
+installiert ist. `git pull` holt die geänderte `package.json`, lädt die Pakete aber
+nicht von selbst herunter.
+
+Der `predeploy`-Eintrag in `firebase.json` führt `npm install` inzwischen vor jedem
+Build aus, damit genau das nicht mehr passiert. Tritt der Fehler trotzdem auf, hilft:
+
+```bash
+npm install
+firebase deploy --only hosting
+```
+
 ### „Error: Specified public directory 'out' does not exist"
 
 Der Build ist nicht gelaufen oder fehlgeschlagen.
