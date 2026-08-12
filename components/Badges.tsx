@@ -12,17 +12,17 @@ export function Pill({
   tone?: "neutral" | "gruen" | "blau" | "lila" | "beere";
 }) {
   const tones = {
-    neutral: "bg-sand-deep",
+    neutral: "bg-line",
     gruen: "bg-grass-soft",
     blau: "bg-sky-soft",
-    lila: "bg-plum-soft",
-    beere: "bg-berry-soft",
+    lila: "bg-sky-soft",
+    beere: "bg-coral-soft",
   } as const;
   return (
     <span
       className={`inline-flex items-center gap-1.5 rounded-full py-1 pr-3 pl-1.5 text-sm font-bold text-ink ${tones[tone]}`}
     >
-      <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white/70">
+      <span className="flex h-6 w-6 items-center justify-center rounded-full bg-paper/70">
         <Art name={art} className="h-4.5 w-4.5" />
       </span>
       {children}

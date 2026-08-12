@@ -62,7 +62,7 @@ export default function ScalePage() {
                 </h3>
                 <span
                   className={`shrink-0 rounded-full px-3 py-1 text-sm font-bold ${
-                    question.weight > 0 ? "bg-sun-soft" : "bg-sand-deep text-ink-soft"
+                    question.weight > 0 ? "bg-sun-soft" : "bg-line text-ink-soft"
                   }`}
                 >
                   {question.weight > 0
@@ -75,7 +75,7 @@ export default function ScalePage() {
                 {question.options.map((option, optionIndex) => (
                   <li
                     key={option.label}
-                    className="flex flex-col items-center gap-1 rounded-2xl bg-sand-deep p-2 text-center"
+                    className="flex flex-col items-center gap-1 rounded-2xl bg-line p-2 text-center"
                   >
                     <Art name={option.art} className="h-10 w-10" />
                     <span className="text-xs font-bold leading-tight">{option.label}</span>
@@ -118,7 +118,7 @@ export default function ScalePage() {
             </li>
           </ol>
 
-          <div className="rounded-2xl bg-sand-deep p-3 text-sm">
+          <div className="rounded-2xl bg-line p-3 text-sm">
             <p className="font-bold">Beispielrechnung</p>
             <p className="mt-1 text-ink-soft">
               Superlustig (5) · nur ein bisschen bleiben (3) · super toben (5) · keine anderen
@@ -143,7 +143,7 @@ export default function ScalePage() {
           </p>
           <ul className="grid grid-cols-2 gap-2">
             {AGE_GROUPS.map((group) => (
-              <li key={group.id} className="rounded-2xl bg-sand-deep p-3">
+              <li key={group.id} className="rounded-2xl bg-line p-3">
                 <Art name={group.art} className="h-8 w-8" />
                 <span className="block font-bold">{group.label}</span>
                 <span className="block text-sm text-ink-soft">{group.short} Jahre</span>
@@ -199,7 +199,7 @@ export default function ScalePage() {
             {HIGHLIGHTS.map((item) => (
               <li
                 key={item.key}
-                className="flex items-center gap-1.5 rounded-full bg-plum-soft px-3 py-1.5 text-sm font-medium"
+                className="flex items-center gap-1.5 rounded-full bg-sky-soft px-3 py-1.5 text-sm font-medium"
               >
                 <Art name={item.art} className="h-6 w-6" />
                 {item.label}

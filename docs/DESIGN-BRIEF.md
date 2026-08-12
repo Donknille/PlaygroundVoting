@@ -1,5 +1,12 @@
 # Design-Brief: Spielplatz-Scouts
 
+> **Stand:** Dieser Brief beschreibt den Zustand *vor* der Umsetzung des
+> Claude-Design-Entwurfs (Konzeptstand 1). Farbwelt, Typografie, Urteilsdarstellung
+> und der Aufbau von Eltern-App und Kinder-Modus sind inzwischen auf den Entwurf
+> umgestellt — die aktuellen Werte stehen in `app/globals.css`. Die Abschnitte zu
+> den harten Anforderungen, zum Maskottchen und zum Bewertungsmaßstab gelten
+> unverändert.
+
 Dieses Dokument ist so geschrieben, dass es allein steht. Es lässt sich vollständig in ein
 Design-Werkzeug einfügen, ohne dass Rückfragen zum Produkt nötig sind. Alle Texte sind die
 echten Texte der App, alle Farbwerte die tatsächlich verwendeten.

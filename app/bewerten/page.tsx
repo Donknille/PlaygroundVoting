@@ -5,11 +5,9 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { Art } from "@/components/art/Art";
 import { Glyph } from "@/components/art/Glyph";
 import { Mascot } from "@/components/art/Mascot";
-import { Pictogram } from "@/components/art/Pictogram";
-import { QUESTION_TINTS } from "@/components/art/Scene";
-import { KidProgressDots, KidQuestion, SpeakButton } from "@/components/KidFlow";
 import { RewardScreen } from "@/components/RewardScreen";
-import { useQueryParam } from "@/lib/hooks";
+import { useCenter, usePlaygroundWorld, useQueryParam } from "@/lib/hooks";
+import { loadProfile, monatJetzt, saveProfile } from "@/lib/profile";
 import { HIGHLIGHTS, QUESTIONS } from "@/lib/questions";
 import { hasRatedToday, saveRating } from "@/lib/ratings";
 import { speak, stopSpeaking } from "@/lib/speech";
@@ -17,319 +15,466 @@ import type { AnswerValue, HighlightKey, Playground, QuestionId } from "@/lib/ty
 import { findPlayground } from "@/lib/world";
 
 const AGES = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
-const TOTAL_STEPS = QUESTIONS.length + 2; // Alter + Fragen + Lieblingsgerät
 
-export default function KidRatingPage() {
-  const id = useQueryParam("id");
-  const [playground, setPlayground] = useState<Playground | null>(null);
-  const [resolved, setResolved] = useState(false);
+/** Die Kernfrage. Alles Weitere ist überspringbare Zusatzrunde. */
+const KERNFRAGE = QUESTIONS[0];
+const ZUSATZFRAGEN = QUESTIONS.slice(1);
 
-  const [step, setStep] = useState(0);
-  const [age, setAge] = useState<number | null>(null);
+type Phase = "ort" | "alter" | "urteil" | "bestes" | "angebot" | "zusatz" | "fertig";
+
+/**
+ * Kinder-Modus.
+ *
+ * Entwurfsvorgabe: „Bewerten dauert unter 30 Sekunden, drei Schritte, kein
+ * Tippen." Die drei Schritte sind: Wo hast du gespielt — Wie war es — Was war
+ * am besten. Das Alter steht im Profil und wird nur gefragt, wenn keines
+ * angelegt ist; danach lässt es sich auf Wunsch merken.
+ *
+ * Die übrigen vier Fragen laufen als ausdrücklich freiwillige Zusatzrunde.
+ * Ohne sie bliebe zu wenig übrig, um ein Kommunen-Dashboard zu speisen; als
+ * Pflicht würden sie den Ablauf verdoppeln. Übersprungene Fragen werden in der
+ * Auswertung ausgelassen, nicht als schlechte Antwort gewertet.
+ */
+export default function KidMode() {
+  const idParam = useQueryParam("id");
+  const { center } = useCenter();
+  const world = usePlaygroundWorld(center, false);
+
+  const [bereit, setBereit] = useState(false);
+  const [ort, setOrt] = useState<Playground | null>(null);
+  const [alter, setAlter] = useState<number | null>(null);
+  const [hatProfil, setHatProfil] = useState(false);
+  const [phase, setPhase] = useState<Phase>("ort");
   const [answers, setAnswers] = useState<Partial<Record<QuestionId, AnswerValue>>>({});
   const [highlights, setHighlights] = useState<HighlightKey[]>([]);
+  const [zusatzNr, setZusatzNr] = useState(0);
   const [muted, setMuted] = useState(false);
-  const [done, setDone] = useState(false);
-  const [alreadyRated, setAlreadyRated] = useState(false);
+  const [schonBewertet, setSchonBewertet] = useState(false);
+  const [alterMerken, setAlterMerken] = useState(true);
 
   useEffect(() => {
-    if (id === null) return;
-    setPlayground(findPlayground(id));
-    setAlreadyRated(hasRatedToday(id));
-    setResolved(true);
-  }, [id]);
+    const profil = loadProfile();
+    if (profil) {
+      setAlter(profil.alter);
+      setHatProfil(true);
+    }
+    const vorgabe = idParam ? findPlayground(idParam) : null;
+    if (vorgabe) {
+      setOrt(vorgabe);
+      setSchonBewertet(hasRatedToday(vorgabe.id));
+      setPhase(profil ? "urteil" : "alter");
+    }
+    setBereit(true);
+  }, [idParam]);
 
   useEffect(() => () => stopSpeaking(), []);
 
-  const finish = useCallback(
-    (chosen: HighlightKey[]) => {
-      if (!id || age === null) return;
-      const complete = QUESTIONS.every((q) => answers[q.id] !== undefined);
-      if (!complete) return;
-      saveRating({
-        playgroundId: id,
-        age,
-        answers: answers as Record<QuestionId, AnswerValue>,
-        highlights: chosen,
-      });
-      stopSpeaking();
-      setDone(true);
+  const ansage = useCallback(
+    (text: string) => {
+      if (!muted) speak(text);
     },
-    [id, age, answers],
+    [muted],
+  );
+
+  const abschliessen = useCallback(
+    (gewaehlt: HighlightKey[], alleAntworten: Partial<Record<QuestionId, AnswerValue>>) => {
+      if (!ort || alter === null) return;
+      saveRating({
+        playgroundId: ort.id,
+        playgroundName: ort.name,
+        age: alter,
+        answers: alleAntworten,
+        highlights: gewaehlt,
+      });
+      if (alterMerken && !hatProfil) {
+        saveProfile({ spitzname: "", alter, seit: monatJetzt() });
+      }
+      stopSpeaking();
+      setPhase("fertig");
+    },
+    [ort, alter, alterMerken, hatProfil],
   );
 
   const seed = useMemo(
-    () =>
-      (age ?? 0) +
-      Object.values(answers).reduce<number>((sum, value) => sum + (value ?? 0), 0),
-    [age, answers],
+    () => (alter ?? 0) + Object.values(answers).reduce<number>((s, v) => s + (v ?? 0), 0),
+    [alter, answers],
   );
 
-  if (!resolved) {
-    return <FullScreen>{null}</FullScreen>;
-  }
+  if (!bereit) return <KidScreen>{null}</KidScreen>;
 
-  if (!id || !playground) {
+  if (schonBewertet && ort) {
     return (
-      <FullScreen>
-        <div className="flex flex-1 flex-col items-center justify-center gap-4 text-center">
-          <Mascot pose="fragt" className="h-36 w-36" />
-          <h1 className="font-display text-2xl font-bold">
-            Diesen Spielplatz kennen wir nicht
-          </h1>
-          <p className="font-semibold text-ink-soft">
-            Öffne ihn noch einmal aus der Liste, dann klappt das Bewerten.
-          </p>
-          <Link href="/" className="btn btn-ink">
-            Zur Spielplatzliste
-          </Link>
-        </div>
-      </FullScreen>
-    );
-  }
-
-  if (done) {
-    return (
-      <FullScreen tint="var(--color-mint-soft)">
-        <RewardScreen
-          playgroundId={id}
-          playgroundName={playground.name}
-          seed={seed}
-        />
-      </FullScreen>
-    );
-  }
-
-  if (alreadyRated) {
-    return (
-      <FullScreen>
-        <div className="flex flex-1 flex-col items-center justify-center gap-4 text-center">
-          <div className="flex h-24 w-24 items-center justify-center rounded-full bg-grass text-white">
-            <Glyph name="haken" className="h-14 w-14" />
+      <KidScreen>
+        <Mitte>
+          <div className="flex h-24 w-24 items-center justify-center rounded-full bg-paper">
+            <Glyph name="haken" className="h-14 w-14 text-grass" />
           </div>
-          <h1 className="font-display text-2xl font-bold">Heute schon bewertet!</h1>
-          <p className="font-semibold text-ink-soft">
-            {playground.name} wurde von diesem Gerät heute bereits bewertet. Morgen geht es
-            wieder — so bleiben die Punkte ehrlich.
+          <h1 className="font-display text-3xl font-bold text-paper">Heute schon bewertet!</h1>
+          <p className="text-lg text-paper/80">
+            {ort.name} hast du heute schon getestet. Morgen geht es wieder — so bleiben die
+            Urteile ehrlich.
           </p>
-          <Link
-            href={`/spielplatz/?id=${encodeURIComponent(id)}`}
-            className="btn btn-ink"
-          >
+          <Link href={`/spielplatz/?id=${encodeURIComponent(ort.id)}`} className="btn btn-paper">
             Ergebnis ansehen
           </Link>
-        </div>
-      </FullScreen>
+        </Mitte>
+      </KidScreen>
     );
   }
 
-  const questionIndex = step - 1;
-  const currentQuestion = QUESTIONS[questionIndex];
+  if (phase === "fertig" && ort) {
+    return (
+      <KidScreen>
+        <RewardScreen playgroundId={ort.id} playgroundName={ort.name} seed={seed} />
+      </KidScreen>
+    );
+  }
 
-  return (
-    <FullScreen tint={QUESTION_TINTS[step % QUESTION_TINTS.length]}>
-      <div className="flex items-center justify-between gap-2 pb-2">
-        <button
-          type="button"
-          onClick={() => {
-            stopSpeaking();
-            if (step > 0) setStep(step - 1);
-          }}
-          className="btn btn-white tap aspect-square !px-0 disabled:opacity-30"
-          disabled={step === 0}
-          aria-label="Eine Frage zurück"
-        >
-          <Glyph name="zurueck" className="h-7 w-7" />
-        </button>
-
-        <KidProgressDots total={TOTAL_STEPS} current={step} />
-
-        <div className="flex gap-2">
-          <button
-            type="button"
-            onClick={() => {
-              setMuted((value) => !value);
-              stopSpeaking();
-            }}
-            className="btn btn-white tap aspect-square !px-0"
-            aria-label={muted ? "Vorlesen einschalten" : "Vorlesen ausschalten"}
-            aria-pressed={!muted}
-          >
-            <Glyph name={muted ? "stumm" : "lautsprecher"} className="h-7 w-7" />
-          </button>
+  /* --- Schritt 1: Wo hast du gespielt? --- */
+  if (phase === "ort") {
+    const vorschlaege = world.playgrounds.slice(0, 6);
+    return (
+      <KidScreen kopf={<KidKopf schritt={1} muted={muted} onMute={() => setMuted((m) => !m)} />}>
+        <h1 className="px-1 pt-1 pb-4 font-display text-4xl leading-tight font-bold text-paper">
+          Wo hast du gespielt?
+        </h1>
+        <div className="flex-1 space-y-3">
+          {vorschlaege.length === 0 ? (
+            <p className="text-lg text-paper/80">
+              Wir wissen gerade nicht, wo ihr seid. Geh zurück und wähle einen Spielplatz aus der
+              Liste.
+            </p>
+          ) : (
+            vorschlaege.map((p, i) => (
+              <button
+                key={p.id}
+                type="button"
+                onClick={() => {
+                  setOrt(p);
+                  setSchonBewertet(hasRatedToday(p.id));
+                  setPhase(hatProfil ? "urteil" : "alter");
+                }}
+                className="flex w-full items-center gap-3 rounded-blob bg-paper p-4 text-left shadow-[0_5px_0_var(--color-kid-dark)] transition active:translate-y-[4px] active:shadow-[0_1px_0_var(--color-kid-dark)]"
+              >
+                <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-line">
+                  <Art name={p.equipment[0] ?? "rutsche"} className="h-9 w-9" />
+                </span>
+                <span className="min-w-0">
+                  <span className="block font-display text-xl leading-tight font-bold">
+                    {p.name}
+                  </span>
+                  <span className="block text-base text-ink-soft">
+                    {i === 0 ? "gleich um die Ecke" : `${Math.round(p.distanceM)} m entfernt`}
+                  </span>
+                </span>
+              </button>
+            ))
+          )}
           <Link
-            href={`/spielplatz/?id=${encodeURIComponent(id)}`}
-            onClick={() => stopSpeaking()}
-            className="btn btn-white tap aspect-square !px-0"
-            aria-label="Bewerten abbrechen"
+            href="/"
+            className="flex w-full items-center justify-center rounded-blob border-2 border-dashed border-paper/50 p-5 text-lg font-bold text-paper/80"
           >
-            <Glyph name="schliessen" className="h-7 w-7" />
+            Woanders gespielt
           </Link>
         </div>
-      </div>
+      </KidScreen>
+    );
+  }
 
-      {step === 0 ? (
-        <AgeStep
-          muted={muted}
-          onPick={(value) => {
-            setAge(value);
-            setStep(1);
+  /* --- Alter, nur wenn kein Profil besteht --- */
+  if (phase === "alter") {
+    return (
+      <KidScreen kopf={<KidKopf schritt={1} muted={muted} onMute={() => setMuted((m) => !m)} />}>
+        <div className="flex flex-col items-center gap-2 py-2 text-center">
+          <Mascot pose="winkt" className="h-24 w-24 animate-bob" />
+          <h1 className="font-display text-4xl font-bold text-paper">Wie alt bist du?</h1>
+          <p className="text-base text-paper/75">Mehr fragen wir nicht.</p>
+        </div>
+        <div className="grid flex-1 grid-cols-4 content-start gap-2">
+          {AGES.map((wert) => (
+            <button
+              key={wert}
+              type="button"
+              onClick={() => {
+                setAlter(wert);
+                setPhase("urteil");
+                ansage(KERNFRAGE.prompt);
+              }}
+              className="flex min-h-20 items-center justify-center rounded-chip bg-paper font-display text-3xl font-bold shadow-[0_5px_0_var(--color-kid-dark)] transition active:translate-y-[4px] active:shadow-[0_1px_0_var(--color-kid-dark)]"
+            >
+              {wert === 13 ? "12+" : wert}
+            </button>
+          ))}
+        </div>
+        <label className="mt-3 flex items-center gap-3 rounded-chip bg-kid-dark p-3 text-paper">
+          <input
+            type="checkbox"
+            checked={alterMerken}
+            onChange={(e) => setAlterMerken(e.target.checked)}
+            className="h-6 w-6 shrink-0 accent-sun"
+          />
+          <span className="text-sm">
+            Alter auf diesem Gerät merken — dann geht es beim nächsten Mal schneller.
+          </span>
+        </label>
+      </KidScreen>
+    );
+  }
+
+  /* --- Schritt 2: Wie war es? --- */
+  if (phase === "urteil") {
+    return (
+      <KidScreen
+        kopf={<KidKopf schritt={2} muted={muted} onMute={() => setMuted((m) => !m)} />}
+        onSprechen={() => ansage(KERNFRAGE.prompt)}
+      >
+        <Frage text={KERNFRAGE.prompt} />
+        <Antworten
+          optionen={KERNFRAGE.options}
+          onWahl={(i) => {
+            setAnswers((p) => ({ ...p, [KERNFRAGE.id]: i as AnswerValue }));
+            setPhase("bestes");
+            ansage("Was war am besten?");
           }}
         />
-      ) : null}
+      </KidScreen>
+    );
+  }
 
-      {currentQuestion ? (
-        <KidQuestion
-          key={currentQuestion.id}
-          prompt={currentQuestion.prompt}
-          art={currentQuestion.art}
-          options={currentQuestion.options}
+  /* --- Schritt 3: Was war am besten? --- */
+  if (phase === "bestes") {
+    return (
+      <KidScreen
+        kopf={<KidKopf schritt={3} muted={muted} onMute={() => setMuted((m) => !m)} />}
+        onSprechen={() => ansage("Was war am besten?")}
+      >
+        <Frage text="Was war am besten?" klein="Du kannst auch nichts auswählen." />
+        <div className="grid flex-1 grid-cols-3 content-start gap-2">
+          {HIGHLIGHTS.map((item) => {
+            const aktiv = highlights.includes(item.key);
+            return (
+              <button
+                key={item.key}
+                type="button"
+                aria-pressed={aktiv}
+                onClick={() =>
+                  setHighlights((p) =>
+                    p.includes(item.key) ? p.filter((k) => k !== item.key) : [...p, item.key],
+                  )
+                }
+                className={`flex min-h-24 flex-col items-center justify-center gap-1 rounded-chip p-2 transition active:translate-y-[3px] ${
+                  aktiv
+                    ? "bg-sun shadow-[0_4px_0_var(--color-sun-deep)]"
+                    : "bg-paper shadow-[0_4px_0_var(--color-kid-dark)]"
+                }`}
+              >
+                <Art name={item.art} className="h-11 w-11" />
+                <span className="text-xs leading-tight font-bold">{item.label}</span>
+              </button>
+            );
+          })}
+        </div>
+        <button
+          type="button"
+          onClick={() => setPhase("angebot")}
+          className="btn btn-sun mt-3 w-full text-xl"
+        >
+          Fertig!
+        </button>
+      </KidScreen>
+    );
+  }
+
+  /* --- Zusatzrunde anbieten, ausdrücklich freiwillig --- */
+  if (phase === "angebot") {
+    return (
+      <KidScreen>
+        <Mitte>
+          <Mascot pose="fragt" className="h-32 w-32 animate-bob" />
+          <h1 className="font-display text-3xl font-bold text-paper">
+            Magst du noch vier Fragen?
+          </h1>
+          <p className="text-lg text-paper/80">
+            Dauert nochmal zehn Sekunden. Muss aber nicht sein.
+          </p>
+          <div className="w-full space-y-2">
+            <button
+              type="button"
+              onClick={() => {
+                setPhase("zusatz");
+                ansage(ZUSATZFRAGEN[0].prompt);
+              }}
+              className="btn btn-sun w-full text-xl"
+            >
+              Ja, gerne
+            </button>
+            <button
+              type="button"
+              onClick={() => abschliessen(highlights, answers)}
+              className="btn btn-paper w-full"
+            >
+              Nein, fertig
+            </button>
+          </div>
+        </Mitte>
+      </KidScreen>
+    );
+  }
+
+  /* --- Zusatzrunde --- */
+  const frage = ZUSATZFRAGEN[zusatzNr];
+  return (
+    <KidScreen
+      kopf={
+        <KidKopf
+          schritt={3}
+          zusatz={`${zusatzNr + 1}/${ZUSATZFRAGEN.length}`}
           muted={muted}
-          speakOnMount={currentQuestion.prompt}
-          onAnswer={(index) => {
-            setAnswers((prev) => ({
-              ...prev,
-              [currentQuestion.id]: index as AnswerValue,
-            }));
-            setStep(step + 1);
-          }}
+          onMute={() => setMuted((m) => !m)}
         />
-      ) : null}
-
-      {step === TOTAL_STEPS - 1 ? (
-        <HighlightStep
-          muted={muted}
-          selected={highlights}
-          onToggle={(key) =>
-            setHighlights((prev) =>
-              prev.includes(key) ? prev.filter((item) => item !== key) : [...prev, key],
-            )
+      }
+      onSprechen={() => ansage(frage.prompt)}
+    >
+      <Frage text={frage.prompt} />
+      <Antworten
+        optionen={frage.options}
+        onWahl={(i) => {
+          const neu = { ...answers, [frage.id]: i as AnswerValue };
+          setAnswers(neu);
+          if (zusatzNr + 1 < ZUSATZFRAGEN.length) {
+            setZusatzNr(zusatzNr + 1);
+            ansage(ZUSATZFRAGEN[zusatzNr + 1].prompt);
+          } else {
+            abschliessen(highlights, neu);
           }
-          onDone={() => finish(highlights)}
-        />
-      ) : null}
-    </FullScreen>
+        }}
+      />
+    </KidScreen>
   );
 }
 
-/**
- * Vollbild mit Farbton je Schritt. Der Farbwechsel ist der eigentliche
- * Fortschrittsanzeiger für Kinder, die die Punktleiste oben nicht deuten.
- */
-function FullScreen({
+/* -------------------------------------------------------------------------- */
+
+/** Eigener Look: dunkles Blau über den ganzen Bildschirm, alles doppelt so groß. */
+function KidScreen({
   children,
-  tint,
+  kopf,
+  onSprechen,
 }: {
   children: React.ReactNode;
-  tint?: string;
+  kopf?: React.ReactNode;
+  onSprechen?: () => void;
 }) {
   return (
-    <div
-      className="flex min-h-dvh flex-col px-3 py-3 transition-colors duration-500"
-      style={{ background: tint ?? "var(--color-sand)" }}
-    >
+    <div className="flex min-h-dvh flex-col bg-kid px-4 py-3">
+      {kopf}
       <main id="inhalt" className="flex flex-1 flex-col">
         {children}
       </main>
+      {onSprechen ? (
+        <button
+          type="button"
+          onClick={onSprechen}
+          className="mx-auto mt-2 flex h-14 w-14 items-center justify-center rounded-full bg-kid-dark text-paper"
+          aria-label="Frage vorlesen"
+        >
+          <Glyph name="lautsprecher" className="h-7 w-7" />
+        </button>
+      ) : null}
     </div>
   );
 }
 
-function AgeStep({
-  onPick,
+function KidKopf({
+  schritt,
+  zusatz,
   muted,
+  onMute,
 }: {
-  onPick: (age: number) => void;
+  schritt: 1 | 2 | 3;
+  zusatz?: string;
   muted: boolean;
+  onMute: () => void;
 }) {
-  useEffect(() => {
-    if (muted) return;
-    const timer = setTimeout(() => speak("Wie alt bist du?"), 250);
-    return () => clearTimeout(timer);
-  }, [muted]);
-
   return (
-    <div className="flex flex-1 flex-col">
-      <div className="flex flex-col items-center justify-center gap-2 py-4 text-center">
-        <Mascot pose="winkt" className="h-28 w-28 animate-bob" />
-        <h1 className="font-display text-3xl font-bold">Wie alt bist du?</h1>
-        <div className="flex items-center gap-2">
-          <SpeakButton text="Wie alt bist du?" muted={muted} />
-          <p className="text-sm font-semibold text-ink-soft">Mehr fragen wir nicht.</p>
-        </div>
-      </div>
-
-      <div className="grid flex-1 grid-cols-4 content-start gap-2">
-        {AGES.map((value) => (
-          <button
-            key={value}
-            type="button"
-            onClick={() => onPick(value)}
-            className="flex min-h-20 items-center justify-center rounded-chip bg-white font-display text-3xl font-bold shadow-[0_5px_0_rgb(42_30_70/0.14)] transition active:translate-y-[4px] active:shadow-[0_1px_0_rgb(42_30_70/0.14)]"
-          >
-            {value === 13 ? "12+" : value}
-          </button>
+    <div className="flex items-center gap-3 pb-3">
+      <Link
+        href="/"
+        className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-kid-dark text-paper"
+        aria-label="Kinder-Modus verlassen"
+      >
+        <Glyph name="zurueck" className="h-6 w-6" />
+      </Link>
+      <div
+        className="flex flex-1 gap-1.5"
+        role="progressbar"
+        aria-valuemin={1}
+        aria-valuemax={3}
+        aria-valuenow={schritt}
+        aria-label={`Schritt ${schritt} von 3`}
+      >
+        {[1, 2, 3].map((s) => (
+          <span
+            key={s}
+            className={`h-2 flex-1 rounded-full ${s <= schritt ? "bg-paper" : "bg-paper/30"}`}
+          />
         ))}
       </div>
+      {zusatz ? <span className="text-sm font-bold text-paper/70">{zusatz}</span> : null}
+      <button
+        type="button"
+        onClick={onMute}
+        aria-pressed={!muted}
+        aria-label={muted ? "Vorlesen einschalten" : "Vorlesen ausschalten"}
+        className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-kid-dark text-paper"
+      >
+        <Glyph name={muted ? "stumm" : "lautsprecher"} className="h-6 w-6" />
+      </button>
     </div>
   );
 }
 
-function HighlightStep({
-  selected,
-  onToggle,
-  onDone,
-  muted,
-}: {
-  selected: HighlightKey[];
-  onToggle: (key: HighlightKey) => void;
-  onDone: () => void;
-  muted: boolean;
-}) {
-  useEffect(() => {
-    if (muted) return;
-    const timer = setTimeout(() => speak("Was war am besten?"), 250);
-    return () => clearTimeout(timer);
-  }, [muted]);
-
+function Frage({ text, klein }: { text: string; klein?: string }) {
   return (
-    <div className="flex flex-1 flex-col">
-      <div className="flex flex-col items-center justify-center gap-1.5 py-3 text-center">
-        <Pictogram name="stern" className="h-14 w-14 animate-wiggle" />
-        <h1 className="font-display text-3xl font-bold">Was war am besten?</h1>
-        <div className="flex items-center gap-2">
-          <SpeakButton text="Was war am besten?" muted={muted} />
-          <p className="text-sm font-semibold text-ink-soft">
-            Du kannst auch nichts auswählen.
-          </p>
-        </div>
-      </div>
+    <div className="px-1 pt-1 pb-4">
+      <h1 className="animate-slide-up font-display text-4xl leading-tight font-bold text-balance text-paper">
+        {text}
+      </h1>
+      {klein ? <p className="mt-1.5 text-base text-paper/75">{klein}</p> : null}
+    </div>
+  );
+}
 
-      <div className="grid grid-cols-3 gap-2">
-        {HIGHLIGHTS.map((item) => {
-          const active = selected.includes(item.key);
-          return (
-            <button
-              key={item.key}
-              type="button"
-              onClick={() => onToggle(item.key)}
-              aria-pressed={active}
-              className={`flex min-h-24 flex-col items-center justify-center gap-1 rounded-chip p-2 transition active:translate-y-[3px] ${
-                active
-                  ? "bg-ink text-white shadow-[0_4px_0_#170f28] ring-4 ring-yolk"
-                  : "bg-white shadow-[0_4px_0_rgb(42_30_70/0.14)]"
-              }`}
-            >
-              <Art name={item.art} className="h-11 w-11" />
-              <span className="text-xs leading-tight font-bold">{item.label}</span>
-            </button>
-          );
-        })}
-      </div>
+function Antworten({
+  optionen,
+  onWahl,
+}: {
+  optionen: readonly { art: string; label: string }[];
+  onWahl: (index: number) => void;
+}) {
+  return (
+    <div className="grid flex-1 grid-cols-3 gap-2 pb-1">
+      {optionen.map((option, index) => (
+        <button
+          key={option.label}
+          type="button"
+          onClick={() => onWahl(index)}
+          className="flex h-full min-h-[28vh] flex-col items-center justify-center gap-3 rounded-blob bg-paper p-2 shadow-[0_5px_0_var(--color-kid-dark)] transition active:translate-y-[4px] active:shadow-[0_1px_0_var(--color-kid-dark)]"
+        >
+          <Art name={option.art} className="h-20 w-20" />
+          <span className="text-center text-sm leading-tight font-bold text-ink-soft">
+            {option.label}
+          </span>
+        </button>
+      ))}
+    </div>
+  );
+}
 
-      <button type="button" onClick={onDone} className="btn btn-primary mt-auto mb-2 w-full text-xl">
-        Fertig!
-      </button>
+function Mitte({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="flex flex-1 flex-col items-center justify-center gap-4 px-2 text-center">
+      {children}
     </div>
   );
 }

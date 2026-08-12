@@ -56,7 +56,7 @@ export function PlaygroundScene({ className = "h-40 w-full" }: { className?: str
       <rect width="400" height="150" fill="url(#scene-himmel)" />
 
       {/* Sonne */}
-      <circle cx="342" cy="34" r="21" fill="var(--color-yolk)" />
+      <circle cx="342" cy="34" r="21" fill="var(--color-sun)" />
       <g
         stroke="var(--color-sun)"
         strokeWidth="4"
@@ -123,7 +123,7 @@ export function PlaygroundScene({ className = "h-40 w-full" }: { className?: str
       </g>
 
       {/* Sandfläche vorn */}
-      <path d="M0 132c70-12 150-12 220 0s110 8 180 2v16H0z" fill="var(--color-yolk)" />
+      <path d="M0 132c70-12 150-12 220 0s110 8 180 2v16H0z" fill="var(--color-sun)" />
       <rect y="146" width="400" height="4" fill="var(--color-sun)" opacity="0.35" />
     </svg>
   );
@@ -137,10 +137,10 @@ export function PlaygroundScene({ className = "h-40 w-full" }: { className?: str
 export const QUESTION_TINTS = [
   "var(--color-sky-soft)",
   "var(--color-grass-soft)",
-  "var(--color-plum-soft)",
-  "var(--color-berry-soft)",
-  "var(--color-yolk-soft)",
-  "var(--color-mint-soft)",
+  "var(--color-sky-soft)",
+  "var(--color-coral-soft)",
+  "var(--color-sun-soft)",
+  "var(--color-grass-soft)",
   "var(--color-sun-soft)",
 ] as const;
 

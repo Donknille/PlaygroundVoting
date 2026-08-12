@@ -2,15 +2,22 @@
 
 import Link from "next/link";
 import { useMemo } from "react";
-import { Glyph } from "@/components/art/Glyph";
-import { FeatureBadges, HighlightBadges, Pill } from "@/components/Badges";
-import { ScoreSmileys } from "@/components/ScoreSmileys";
+import { Art } from "@/components/art/Art";
+import { VerdictBadge, VerdictSource } from "@/components/Verdict";
 import { formatDistance, walkingMinutes } from "@/lib/geo";
-import { getAgeGroup } from "@/lib/questions";
+import { featureMeta, getAgeGroup, highlightMeta } from "@/lib/questions";
 import { aggregateFor, hasShadeBadge } from "@/lib/scoring";
 import type { AgeGroupId, PlaygroundWithDistance } from "@/lib/types";
 import { ratingsForPlayground } from "@/lib/world";
 
+/**
+ * Eine Zeile in der Spielplatzliste, nach dem Entwurf:
+ * Bild links, Name, eine Zeile Fakten, rechts das Urteil als Wort und darunter,
+ * auf wie vielen Kindern es beruht.
+ *
+ * Der Entwurf fordert „Eltern sehen fünf Fakten in zwei Sekunden": Name,
+ * Entfernung, Altersspanne, ein Merkmal, Urteil.
+ */
 export function PlaygroundCard({
   playground,
   group,
@@ -27,52 +34,49 @@ export function PlaygroundCard({
     };
   }, [playground, group]);
 
-  const groupLabel =
-    group === "alle" ? "alle Altersgruppen" : `${getAgeGroup(group).short} Jahre`;
+  const groupLabel = group === "alle" ? undefined : `${getAgeGroup(group).short} J.`;
+
+  // Bild links: das meistgenannte Gerät der Kinder, sonst die erste Ausstattung.
+  const bild =
+    forGroup.highlights[0]?.key ??
+    overall.highlights[0]?.key ??
+    playground.equipment[0] ??
+    null;
+  const bildName = bild ? highlightMeta(bild).art : "rutsche";
+
+  // Eine Faktenzeile, höchstens drei Angaben — sonst liest sie niemand.
+  const fakten = [
+    `${walkingMinutes(playground.distanceM)} Min`,
+    formatDistance(playground.distanceM),
+    shade ? "Schatten" : playground.features[0] ? featureMeta(playground.features[0]).label : null,
+  ].filter(Boolean);
 
   return (
     <Link
       href={`/spielplatz/?id=${encodeURIComponent(playground.id)}`}
-      className="card block p-4 transition active:translate-y-[2px] active:shadow-[0_2px_12px_-8px_rgb(42_30_70/0.4)]"
+      className="card flex items-center gap-3 p-3 transition active:translate-y-[1px]"
     >
-      <div className="flex items-start justify-between gap-3">
-        <h3 className="font-display text-lg leading-tight font-bold">{playground.name}</h3>
-        <span className="flex shrink-0 items-center gap-1 rounded-full bg-grass-soft px-2.5 py-1 text-sm font-bold text-grass-deep">
-          <Glyph name="standort" filled className="h-4 w-4" />
-          {formatDistance(playground.distanceM)}
+      <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-line">
+        <Art name={bildName} className="h-9 w-9" />
+      </span>
+
+      <span className="min-w-0 flex-1">
+        <span className="line-clamp-2 block font-display text-base leading-tight font-bold">
+          {playground.name}
         </span>
-      </div>
+        <span className="mt-0.5 block truncate text-sm text-ink-soft">
+          {fakten.join(" · ")}
+        </span>
+      </span>
 
-      <p className="mt-0.5 text-sm font-semibold text-ink-soft">
-        ca. {walkingMinutes(playground.distanceM)} Min. zu Fuß
-        {playground.source === "demo" ? " · Demo-Platz" : ""}
-      </p>
-
-      <div className="mt-3">
-        <ScoreSmileys
-          score={forGroup.score}
+      <span className="flex shrink-0 flex-col items-end gap-1">
+        <VerdictBadge score={forGroup.score} />
+        <VerdictSource
           count={forGroup.count}
           groupLabel={groupLabel}
-          linkToScale={false}
+          className="text-[11px] font-semibold"
         />
-        {forGroup.count === 0 && overall.score !== null ? (
-          <p className="mt-1 text-xs font-semibold text-ink-soft">
-            Für andere Altersgruppen liegen {overall.count} Bewertungen vor.
-          </p>
-        ) : null}
-      </div>
-
-      {(shade || playground.features.length > 0 || forGroup.highlights.length > 0) && (
-        <div className="mt-3 flex flex-wrap gap-1.5">
-          {shade ? (
-            <Pill art="baum" tone="gruen">
-              Schattig
-            </Pill>
-          ) : null}
-          <HighlightBadges highlights={forGroup.highlights} limit={2} />
-          <FeatureBadges features={playground.features} limit={2} />
-        </div>
-      )}
+      </span>
     </Link>
   );
 }

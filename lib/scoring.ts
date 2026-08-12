@@ -18,7 +18,7 @@ export type Aggregate = {
   /** Spaß-Punkte 1–5. null, solange zu wenige Bewertungen vorliegen. */
   score: number | null;
   /** Median je Frage auf der Rohskala 0–2. */
-  perQuestion: Record<QuestionId, number>;
+  perQuestion: Record<QuestionId, number | null>;
   highlights: { key: HighlightKey; count: number }[];
 };
 
@@ -31,10 +31,17 @@ export function median(values: number[]): number {
 
 /** Punktwert einer einzelnen Bewertung – nur gewichtete Fragen zählen. */
 export function scoreOfRating(rating: Rating): number {
-  return SCORED_QUESTIONS.reduce((sum, q) => {
+  let summe = 0;
+  let gewicht = 0;
+  for (const q of SCORED_QUESTIONS) {
     const answer = rating.answers[q.id];
-    return sum + q.weight * ANSWER_POINTS[answer];
-  }, 0);
+    if (answer === undefined) continue;
+    summe += q.weight * ANSWER_POINTS[answer];
+    gewicht += q.weight;
+  }
+  // Auf die tatsächlich beantworteten Fragen normieren, damit eine
+  // übersprungene Zusatzfrage den Wert nicht nach unten zieht.
+  return gewicht === 0 ? 0 : summe / gewicht;
 }
 
 /**
@@ -42,9 +49,12 @@ export function scoreOfRating(rating: Rating): number {
  * Ein einzelner Ausreißer (oder Spaßvogel) kippt damit kein Ergebnis.
  */
 export function aggregate(ratings: Rating[]): Aggregate {
-  const perQuestion = {} as Record<QuestionId, number>;
+  const perQuestion = {} as Record<QuestionId, number | null>;
   for (const q of QUESTIONS) {
-    perQuestion[q.id] = median(ratings.map((r) => r.answers[q.id] ?? 0));
+    const werte = ratings
+      .map((r) => r.answers[q.id])
+      .filter((v): v is AnswerValue => v !== undefined);
+    perQuestion[q.id] = werte.length > 0 ? median(werte) : null;
   }
 
   const highlightCounts = new Map<HighlightKey, number>();
@@ -56,14 +66,21 @@ export function aggregate(ratings: Rating[]): Aggregate {
 
   const score =
     ratings.length >= MIN_RATINGS_FOR_SCORE
-      ? SCORED_QUESTIONS.reduce((sum, q) => {
-          const medianAnswer = perQuestion[q.id];
-          // Zwischen den Stufen linear interpolieren (Median kann x,5 sein).
-          const low = ANSWER_POINTS[Math.floor(medianAnswer) as AnswerValue];
-          const high = ANSWER_POINTS[Math.ceil(medianAnswer) as AnswerValue];
-          const frac = medianAnswer - Math.floor(medianAnswer);
-          return sum + q.weight * (low + (high - low) * frac);
-        }, 0)
+      ? (() => {
+          let summe = 0;
+          let gewicht = 0;
+          for (const q of SCORED_QUESTIONS) {
+            const medianAnswer = perQuestion[q.id];
+            if (medianAnswer === null) continue;
+            // Zwischen den Stufen linear interpolieren (Median kann x,5 sein).
+            const low = ANSWER_POINTS[Math.floor(medianAnswer) as AnswerValue];
+            const high = ANSWER_POINTS[Math.ceil(medianAnswer) as AnswerValue];
+            const frac = medianAnswer - Math.floor(medianAnswer);
+            summe += q.weight * (low + (high - low) * frac);
+            gewicht += q.weight;
+          }
+          return gewicht === 0 ? null : summe / gewicht;
+        })()
       : null;
 
   return {
@@ -98,7 +115,8 @@ export function aggregatesByAgeGroup(
 
 /** Median der Schattenfrage ≥ 1,5 → der Platz bekommt das Schatten-Abzeichen. */
 export function hasShadeBadge(agg: Aggregate): boolean {
-  return agg.count >= MIN_RATINGS_FOR_SCORE && agg.perQuestion.schatten >= 1.5;
+  const schatten = agg.perQuestion.schatten;
+  return agg.count >= MIN_RATINGS_FOR_SCORE && schatten !== null && schatten >= 1.5;
 }
 
 export function formatScore(score: number): string {
@@ -110,4 +128,35 @@ export function scoreProvenance(count: number, groupLabel: string): string {
   if (count === 0) return "Noch keine Bewertung";
   const plural = count === 1 ? "Bewertung" : "Bewertungen";
   return `aus ${count} ${plural} von Kindern (${groupLabel})`;
+}
+
+/**
+ * Das Urteil als Wort statt als Note.
+ *
+ * Entwurfsprinzip: „Pins zeigen das Kinderurteil als Wort, nicht als Note."
+ * Kinder denken nicht in 3,7 von 5 — und Eltern wollen im Vorbeigehen eine
+ * Antwort, keine Nachkommastelle. Gerechnet wird intern weiter auf der
+ * 1–5-Skala, damit das Kommunen-Dashboard und die Datenlizenzen die
+ * Abstufung behalten; nach außen zeigen wir drei Wörter.
+ */
+export type Verdict = {
+  wort: "Super" | "Okay" | "Geht so";
+  /** CSS-Variable für den Punkt vor dem Wort. */
+  farbe: string;
+  /** Flächenfarbe, wenn das Urteil als Abzeichen erscheint. */
+  flaeche: string;
+};
+
+export const VERDICT_UNBEWERTET: Verdict = {
+  wort: "Geht so",
+  farbe: "var(--color-ink-fainter)",
+  flaeche: "var(--color-line)",
+};
+
+export function verdictFor(score: number): Verdict {
+  if (score >= 4)
+    return { wort: "Super", farbe: "var(--color-grass)", flaeche: "var(--color-grass-soft)" };
+  if (score >= 2.75)
+    return { wort: "Okay", farbe: "var(--color-sun)", flaeche: "var(--color-sun-soft)" };
+  return { wort: "Geht so", farbe: "var(--color-coral)", flaeche: "var(--color-coral-soft)" };
 }

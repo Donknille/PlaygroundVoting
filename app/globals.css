@@ -2,63 +2,54 @@
 
 @theme {
   /* ---------------------------------------------------------------
-     Farbwelt: kräftig, warm, hoher Kontrast.
-     Gebaut für ein Handy in der Sonne — keine Pastelltöne, keine
-     Grauabstufungen, die draußen verschwinden.
-     Jede Farbe hat drei Rollen:
-       -soft  Fläche hinter dunklem Text
-       (pur)  Illustration und Icon
-       -deep  Knopfhintergrund mit weißem Text (Kontrast geprüft)
+     Farbwelt aus dem Entwurf (Konzeptstand 1).
+     Sonnengelb führt, drei Nebenfarben gleicher Sättigung für die
+     Geräte-Kategorien, Papierweiß statt Reinweiß. Die Werte sind aus
+     dem Entwurf ausgelesen, nicht nachempfunden.
      --------------------------------------------------------------- */
-  --color-ink: #2a1e46;
-  --color-ink-soft: #6b6188;
-  --color-sand: #fff4e2;
-  --color-sand-deep: #ffe3bb;
-  --color-card: #ffffff;
+  --color-ink: #2e2a24;
+  --color-ink-soft: #6b6357;
+  --color-ink-faint: #8a8071;
+  --color-ink-fainter: #a89c86;
 
-  --color-sun: #ff9500;
-  --color-sun-deep: #b35f00;
-  --color-sun-soft: #ffe8c7;
+  --color-paper: #fdf8ee;
+  --color-sand: #f2ece0;
+  --color-line: #efe7d6;
 
-  --color-yolk: #ffc933;
-  --color-yolk-soft: #fff3cc;
+  /* Leitfarbe. Trägt immer dunklen Text — Weiß darauf wäre zu kontrastarm. */
+  --color-sun: #f5b700;
+  --color-sun-deep: #b07a00;
+  --color-sun-soft: #fdf0cc;
 
-  --color-grass: #16a95e;
-  --color-grass-deep: #0b7a43;
-  --color-grass-soft: #d4f5e3;
+  --color-grass: #2e9e6b;
+  --color-grass-deep: #1f7a50;
+  --color-grass-soft: #dcf0e6;
 
-  --color-sky: #2f86ff;
-  --color-sky-deep: #1a5fc4;
-  --color-sky-soft: #d8e8ff;
+  --color-sky: #3c87c9;
+  --color-sky-deep: #2a6ba6;
+  --color-sky-soft: #dceaf6;
 
-  --color-coral: #ff5245;
-  --color-coral-deep: #c0362b;
-  --color-coral-soft: #ffdfdc;
+  --color-coral: #d2604f;
+  --color-coral-deep: #a8412f;
+  --color-coral-soft: #f8e2dd;
 
-  --color-plum: #7c4dff;
-  --color-plum-deep: #5a2fd0;
-  --color-plum-soft: #e8e0ff;
+  --color-bark: #8b6b45;
+  --color-bark-soft: #ece0cf;
 
-  --color-berry: #ff4f96;
-  --color-berry-deep: #c9256a;
-  --color-berry-soft: #ffdcec;
+  /* Kinder-Modus: eigener Look, dunkles Blau über den ganzen Bildschirm. */
+  --color-kid: #1f6fb2;
+  --color-kid-light: #2c77b5;
+  --color-kid-dark: #1a5f98;
 
-  --color-mint: #0fbfa4;
-  --color-mint-deep: #0a8271;
-  --color-mint-soft: #d1f6f0;
+  /* Kartenflächen */
+  --color-map-green: #d5e4c5;
 
-  --color-bark: #8b5e3c;
-  --color-bark-soft: #f0dfd1;
+  --radius-blob: 1.5rem;
+  --radius-chip: 1rem;
 
-  --radius-blob: 2rem;
-  --radius-chip: 1.25rem;
-
-  /* Fredoka für alles Laute, Nunito für alles Lesbare. Beide selbst gehostet
-     (siehe app/layout.tsx) — sie greifen deshalb auch auf Android, wo es
-     ui-rounded nicht gibt. */
-  --font-display: "Fredoka Variable", ui-rounded, "SF Pro Rounded", system-ui, sans-serif;
-  --font-sans: "Nunito Variable", ui-rounded, system-ui, -apple-system, "Segoe UI",
-    Roboto, "Helvetica Neue", sans-serif;
+  --font-display: "Fredoka Variable", ui-rounded, system-ui, sans-serif;
+  --font-sans: "Figtree Variable", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
 }
 
 html {
@@ -70,7 +61,7 @@ body {
   background: var(--color-sand);
   color: var(--color-ink);
   font-family: var(--font-sans);
-  font-weight: 500;
+  font-weight: 450;
   overscroll-behavior-y: none;
 }
 
@@ -80,7 +71,17 @@ h3,
 .font-display {
   font-family: var(--font-display);
   font-weight: 600;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.015em;
+}
+
+/* Kleinversalien-Beschriftung wie im Entwurf: „SPIELPLÄTZE IN", „DEINE ABZEICHEN" */
+@utility label {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-ink-faint);
 }
 
 /* Mindest-Touchziel 56px – Kinderfinger und Elternhände mit Kind auf dem Arm */
@@ -90,24 +91,23 @@ h3,
 }
 
 @utility card {
-  background: var(--color-card);
+  background: var(--color-paper);
   border-radius: var(--radius-blob);
   box-shadow:
-    0 2px 0 rgb(42 30 70 / 0.05),
-    0 12px 26px -16px rgb(42 30 70 / 0.4);
+    0 1px 0 rgb(46 42 36 / 0.04),
+    0 10px 22px -16px rgb(46 42 36 / 0.35);
 }
 
-/* Aufkleber-Optik: weißer Rand ringsum, wie ein aufgeklebter Sticker. */
 @utility sticker {
   box-shadow:
-    0 0 0 4px var(--color-card),
-    0 8px 18px -10px rgb(42 30 70 / 0.55);
+    0 0 0 4px var(--color-paper),
+    0 8px 18px -10px rgb(46 42 36 / 0.5);
 }
 
 /* ---------------------------------------------------------------
-   Knöpfe mit dicker Unterkante, die beim Drücken einfedert.
-   Das ist die auffälligste Geste des neuen Designs: Knöpfe fühlen
-   sich an wie Spielzeugtasten statt wie Formularfelder.
+   Knöpfe mit harter Unterkante, die beim Drücken einfedert.
+   Im Entwurf ausdrücklich für den Kinder-Modus vorgesehen
+   („Buttons mit hartem Schatten zum Drücken"), hier für die ganze App.
    --------------------------------------------------------------- */
 .btn {
   display: inline-flex;
@@ -119,46 +119,47 @@ h3,
   border-radius: var(--radius-chip);
   font-family: var(--font-display);
   font-weight: 600;
-  font-size: 1.125rem;
+  font-size: 1.0625rem;
   line-height: 1.15;
-  box-shadow: 0 4px 0 var(--btn-edge, rgb(42 30 70 / 0.15));
+  box-shadow: 0 3px 0 var(--btn-edge, rgb(46 42 36 / 0.16));
   transition:
     transform 90ms ease,
     box-shadow 90ms ease;
 }
 
 .btn:active {
-  transform: translateY(3px);
-  box-shadow: 0 1px 0 var(--btn-edge, rgb(42 30 70 / 0.15));
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 var(--btn-edge, rgb(46 42 36 / 0.16));
 }
 
 .btn-primary {
   background: var(--color-grass-deep);
   color: #fff;
-  --btn-edge: #064c2a;
+  --btn-edge: #145638;
 }
 
+/* Der einzige gelbe Punkt im Elternteil — dadurch unverwechselbar. */
 .btn-sun {
   background: var(--color-sun);
   color: var(--color-ink);
-  --btn-edge: #c96f00;
+  --btn-edge: var(--color-sun-deep);
 }
 
 .btn-ink {
   background: var(--color-ink);
-  color: #fff;
-  --btn-edge: #170f28;
+  color: var(--color-paper);
+  --btn-edge: #16130f;
 }
 
-.btn-white {
-  background: var(--color-card);
+.btn-paper {
+  background: var(--color-paper);
   color: var(--color-ink);
-  --btn-edge: rgb(42 30 70 / 0.16);
+  --btn-edge: rgb(46 42 36 / 0.18);
 }
 
 /* Sichtbarer Fokus – wird für Tastatur und Screenreader gebraucht */
 :where(a, button, [role="button"], input, select):focus-visible {
-  outline: 3px solid var(--color-plum);
+  outline: 3px solid var(--color-sky-deep);
   outline-offset: 3px;
   border-radius: 0.75rem;
 }
@@ -198,7 +199,6 @@ h3,
   }
 }
 
-/* Maskottchen schwebt leicht — lebendig, ohne abzulenken. */
 @keyframes bob {
   0%,
   100% {
@@ -235,6 +235,15 @@ h3,
   }
 }
 
+@keyframes sheet-up {
+  0% {
+    transform: translateY(100%);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
 .animate-pop-in {
   animation: pop-in 260ms cubic-bezier(0.2, 0.9, 0.3, 1.2) both;
 }
@@ -255,6 +264,10 @@ h3,
   animation: slide-up 320ms cubic-bezier(0.2, 0.9, 0.3, 1.1) both;
 }
 
+.animate-sheet-up {
+  animation: sheet-up 280ms cubic-bezier(0.2, 0.9, 0.3, 1) both;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -265,10 +278,59 @@ h3,
   }
 }
 
-/* Leaflet: Grundgerüst ohne externes Stylesheet (Egress-unabhängig) */
+/* ---------------------------------------------------------------
+   Karte
+   --------------------------------------------------------------- */
 .leaflet-container {
   height: 100%;
   width: 100%;
-  background: #cfe3d6;
+  background: var(--color-map-green);
   font-family: var(--font-sans);
+}
+
+/* Die bunten Standardkacheln dämpfen und anwärmen, damit sie sich dem
+   Papierton unterordnen und die Urteils-Pins die kräftigsten Elemente
+   auf dem Bildschirm bleiben. Zum Nachjustieren reicht dieser eine Wert. */
+.leaflet-tile-pane {
+  filter: saturate(0.55) sepia(0.28) brightness(1.05) contrast(0.92);
+}
+
+/* Pin zeigt das Kinderurteil als Wort, nicht als Note. */
+.pin {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 13px;
+  line-height: 1;
+  padding: 7px 12px 7px 9px;
+  border-radius: 999px;
+  white-space: nowrap;
+  box-shadow: 0 2px 6px rgb(46 42 36 / 0.28);
+}
+
+.pin::before {
+  content: "";
+  width: 11px;
+  height: 11px;
+  border-radius: 999px;
+  background: var(--pin-dot, var(--color-ink-fainter));
+  flex: none;
+}
+
+.pin-selected {
+  outline: 3px solid var(--color-ink);
+  transform: scale(1.06);
+}
+
+.here {
+  width: 20px;
+  height: 20px;
+  border-radius: 999px;
+  background: var(--color-sky);
+  border: 4px solid var(--color-paper);
+  box-shadow: 0 2px 6px rgb(46 42 36 / 0.4);
 }

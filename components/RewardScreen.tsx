@@ -19,11 +19,11 @@ const STICKERS: PictogramName[] = [
 
 const CONFETTI_COLORS = [
   "var(--color-sun)",
-  "var(--color-berry)",
+  "var(--color-coral)",
   "var(--color-sky)",
   "var(--color-grass)",
-  "var(--color-yolk)",
-  "var(--color-plum)",
+  "var(--color-sun)",
+  "var(--color-sky)",
 ];
 
 /** Belohnung am Ende – der Grund, warum Kinder ein zweites Mal mitmachen. */
@@ -68,7 +68,7 @@ export function RewardScreen({
 
       <Mascot pose="jubelt" className="relative h-40 w-40 animate-tada" />
 
-      <div className="relative flex h-28 w-28 items-center justify-center rounded-full bg-white sticker animate-pop-in">
+      <div className="relative flex h-28 w-28 items-center justify-center rounded-full bg-paper sticker animate-pop-in">
         <Pictogram name={sticker} className="h-20 w-20" />
       </div>
 
@@ -86,7 +86,7 @@ export function RewardScreen({
         >
           Ergebnis ansehen
         </Link>
-        <Link href="/" className="btn btn-white w-full">
+        <Link href="/" className="btn btn-paper w-full">
           Nächster Spielplatz
         </Link>
       </div>

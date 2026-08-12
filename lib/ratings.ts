@@ -49,13 +49,15 @@ export function hasRatedToday(playgroundId: string): boolean {
 
 export function saveRating(input: {
   playgroundId: string;
+  playgroundName?: string;
   age: number;
-  answers: Record<QuestionId, AnswerValue>;
+  answers: Partial<Record<QuestionId, AnswerValue>>;
   highlights: HighlightKey[];
 }): Rating {
   const rating: Rating = {
     id: `${input.playgroundId}:${today()}:${Math.random().toString(36).slice(2, 8)}`,
     playgroundId: input.playgroundId,
+    playgroundName: input.playgroundName,
     age: input.age,
     ageGroup: ageGroupForAge(input.age),
     answers: input.answers,

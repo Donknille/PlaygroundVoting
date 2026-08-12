@@ -34,4 +34,5 @@ export const STORAGE_KEYS = {
   ageGroup: "scouts.agegroup.v1",
   playgroundCache: "scouts.playgrounds.v1",
   lastCenter: "scouts.center.v1",
+  profile: "scouts.profile.v1",
 } as const;

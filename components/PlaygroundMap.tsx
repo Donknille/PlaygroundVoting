@@ -3,31 +3,42 @@
 import "leaflet/dist/leaflet.css";
 import type { Map as LeafletMap, Marker } from "leaflet";
 import { useEffect, useRef } from "react";
-import { aggregateFor, formatScore } from "@/lib/scoring";
+import { aggregateFor, verdictFor } from "@/lib/scoring";
 import type { AgeGroupId, Coords, PlaygroundWithDistance } from "@/lib/types";
 import { ratingsForPlayground } from "@/lib/world";
 
 /**
- * Karte als Zweitansicht. Die Liste bleibt der schnellste Weg zum Ziel; die Karte
- * hilft beim Einordnen („welcher liegt auf dem Heimweg?").
+ * Karte als eine von zwei Ansichten der Eltern-App.
  *
- * Marker werden als DivIcon gebaut – so braucht die Karte keine Bilddateien und
- * zeigt den Punktwert direkt im Pin.
+ * Entwurfsprinzip: „Pins zeigen das Kinderurteil als Wort, nicht als Note."
+ * Die Pins sind deshalb Papierkapseln mit farbigem Punkt und einem Wort —
+ * keine Zahlen, keine Bilddateien, keine externe Marker-Grafik.
+ *
+ * Die Kachelquelle ist über Umgebungsvariablen austauschbar. Ein späterer
+ * Wechsel auf einen gestaltbaren Anbieter ist damit eine Zeile Konfiguration
+ * und kein Umbau.
  */
+const TILE_URL =
+  process.env.NEXT_PUBLIC_MAP_TILES ?? "https://tile.openstreetmap.org/{z}/{x}/{y}.png";
+const TILE_ATTRIBUTION =
+  process.env.NEXT_PUBLIC_MAP_ATTRIBUTION ?? "© OpenStreetMap-Mitwirkende";
+
 export default function PlaygroundMap({
   center,
   playgrounds,
   group,
+  selectedId,
   onSelect,
 }: {
   center: Coords;
   playgrounds: PlaygroundWithDistance[];
   group: AgeGroupId | "alle";
-  onSelect: (playground: PlaygroundWithDistance) => void;
+  selectedId?: string | null;
+  onSelect: (playground: PlaygroundWithDistance | null) => void;
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<LeafletMap | null>(null);
-  const markersRef = useRef<Marker[]>([]);
+  const markersRef = useRef<{ id: string; marker: Marker }[]>([]);
   const selectRef = useRef(onSelect);
   selectRef.current = onSelect;
 
@@ -40,25 +51,23 @@ export default function PlaygroundMap({
 
       const map = L.map(containerRef.current, {
         center: [center.lat, center.lon],
-        zoom: 14,
-        zoomControl: true,
-        attributionControl: true,
+        zoom: 15,
+        // Eigene Bedienelemente im App-Stil statt der eckigen Vorgabe.
+        zoomControl: false,
+        attributionControl: false,
       });
 
-      L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
-        maxZoom: 19,
-        attribution: "© OpenStreetMap-Mitwirkende",
-      }).addTo(map);
+      L.tileLayer(TILE_URL, { maxZoom: 19 }).addTo(map);
 
-      L.circleMarker([center.lat, center.lon], {
-        radius: 8,
-        color: "#2570d4",
-        weight: 3,
-        fillColor: "#ffffff",
-        fillOpacity: 1,
+      L.marker([center.lat, center.lon], {
+        icon: L.divIcon({ className: "", html: `<div class="here"></div>`, iconSize: [20, 20] }),
+        interactive: false,
       })
         .addTo(map)
         .bindTooltip("Ihr seid hier");
+
+      // Tippen auf die Fläche hebt die Auswahl auf.
+      map.on("click", () => selectRef.current(null));
 
       mapRef.current = map;
     })();
@@ -76,26 +85,21 @@ export default function PlaygroundMap({
       const map = mapRef.current;
       if (cancelled || !map) return;
 
-      for (const marker of markersRef.current) marker.remove();
+      for (const { marker } of markersRef.current) marker.remove();
       markersRef.current = [];
 
       for (const playground of playgrounds) {
         const aggregate = aggregateFor(ratingsForPlayground(playground), group);
-        const label = aggregate.score === null ? "?" : formatScore(aggregate.score);
-        const tone =
+        const urteil =
           aggregate.score === null
-            ? "#b9c1cf"
-            : aggregate.score >= 4
-              ? "#1f9d55"
-              : aggregate.score >= 3
-                ? "#f59f0b"
-                : "#e64a35";
+            ? { wort: "?", farbe: "var(--color-ink-fainter)" }
+            : verdictFor(aggregate.score);
 
         const icon = L.divIcon({
           className: "",
-          html: `<div style="display:flex;align-items:center;gap:4px;background:${tone};color:#fff;font-weight:800;font-size:13px;padding:5px 9px;border-radius:999px;box-shadow:0 2px 8px rgba(0,0,0,.3);white-space:nowrap"><svg width="14" height="14" viewBox="0 0 32 32"><circle cx="16" cy="16" r="14" fill="#fff"/><circle cx="11" cy="13.5" r="2.2" fill="#2a1e46"/><circle cx="21" cy="13.5" r="2.2" fill="#2a1e46"/><path d="M10.5 20c1.8 3.6 9.2 3.6 11 0" stroke="#2a1e46" stroke-width="2.6" fill="none" stroke-linecap="round"/></svg>${label}</div>`,
-          iconSize: [66, 30],
-          iconAnchor: [33, 30],
+          html: `<div class="pin" style="--pin-dot:${urteil.farbe}">${urteil.wort}</div>`,
+          iconSize: [0, 0],
+          iconAnchor: [0, 0],
         });
 
         const marker = L.marker([playground.lat, playground.lon], {
@@ -103,9 +107,13 @@ export default function PlaygroundMap({
           title: playground.name,
         })
           .addTo(map)
-          .on("click", () => selectRef.current(playground));
+          .on("click", (event) => {
+            // Sonst räumt der Klick auf die Karte die Auswahl sofort wieder ab.
+            L.DomEvent.stopPropagation(event);
+            selectRef.current(playground);
+          });
 
-        markersRef.current.push(marker);
+        markersRef.current.push({ id: playground.id, marker });
       }
     })();
 
@@ -114,6 +122,17 @@ export default function PlaygroundMap({
     };
   }, [playgrounds, group]);
 
+  // Auswahl nur hervorheben, statt alle Marker neu zu bauen — sonst flackert es.
+  useEffect(() => {
+    for (const { id, marker } of markersRef.current) {
+      const el = marker.getElement()?.querySelector(".pin");
+      el?.classList.toggle("pin-selected", id === selectedId);
+    }
+    if (!selectedId) return;
+    const treffer = playgrounds.find((p) => p.id === selectedId);
+    if (treffer) mapRef.current?.panTo([treffer.lat, treffer.lon]);
+  }, [selectedId, playgrounds]);
+
   useEffect(() => {
     return () => {
       mapRef.current?.remove();
@@ -121,5 +140,54 @@ export default function PlaygroundMap({
     };
   }, []);
 
-  return <div ref={containerRef} className="h-full w-full" />;
+  const zoom = (delta: number) => {
+    const map = mapRef.current;
+    if (map) map.setZoom(map.getZoom() + delta);
+  };
+
+  return (
+    <div className="relative h-full w-full">
+      <div ref={containerRef} className="h-full w-full" />
+
+      <div className="absolute top-3 right-3 z-[500] flex flex-col gap-1.5">
+        <MapKnopf label="Hineinzoomen" onClick={() => zoom(1)}>
+          +
+        </MapKnopf>
+        <MapKnopf label="Herauszoomen" onClick={() => zoom(-1)}>
+          −
+        </MapKnopf>
+        <MapKnopf
+          label="Auf euren Standort zentrieren"
+          onClick={() => mapRef.current?.setView([center.lat, center.lon], 15)}
+        >
+          <span className="block h-3.5 w-3.5 rounded-full border-[3px] border-ink" />
+        </MapKnopf>
+      </div>
+
+      <p className="pointer-events-none absolute bottom-1 left-2 z-[500] rounded bg-paper/80 px-1.5 py-0.5 text-[10px] text-ink-faint">
+        {TILE_ATTRIBUTION}
+      </p>
+    </div>
+  );
+}
+
+function MapKnopf({
+  children,
+  label,
+  onClick,
+}: {
+  children: React.ReactNode;
+  label: string;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-label={label}
+      className="flex h-11 w-11 items-center justify-center rounded-xl bg-paper font-display text-2xl leading-none font-bold shadow-[0_2px_0_rgb(46_42_36/0.18)] transition active:translate-y-[2px] active:shadow-none"
+    >
+      {children}
+    </button>
+  );
 }

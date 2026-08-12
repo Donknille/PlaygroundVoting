@@ -7,7 +7,7 @@ import { Mascot } from "@/components/art/Mascot";
 import { Pictogram } from "@/components/art/Pictogram";
 import { useEffect, useMemo, useState } from "react";
 import { FeatureBadges, HighlightBadges, Pill } from "@/components/Badges";
-import { ScoreSmileys } from "@/components/ScoreSmileys";
+import { VerdictLine } from "@/components/Verdict";
 import {
   formatDistance,
   haversineM,
@@ -81,7 +81,7 @@ export default function PlaygroundDetailPage() {
         <div className="mx-auto flex max-w-2xl items-center gap-3">
           <Link
             href="/"
-            className="tap flex items-center justify-center rounded-full bg-white px-4 text-xl shadow-sm ring-1 ring-black/5"
+            className="tap flex items-center justify-center rounded-full bg-paper px-4 text-xl shadow-sm ring-1 ring-black/5"
             aria-label="Zurück zur Liste"
           >
             <Glyph name="zurueck" className="h-6 w-6" />
@@ -102,7 +102,7 @@ export default function PlaygroundDetailPage() {
             </p>
           </div>
 
-          <ScoreSmileys
+          <VerdictLine
             score={forGroup.score}
             count={forGroup.count}
             groupLabel={groupLabel}
@@ -145,7 +145,7 @@ export default function PlaygroundDetailPage() {
                     onClick={() => setGroup(groupId)}
                     aria-pressed={active}
                     className={`flex w-full items-center gap-3 rounded-2xl px-3 py-3 text-left transition ${
-                      active ? "bg-ink text-white" : "bg-sand-deep"
+                      active ? "bg-ink text-white" : "bg-line"
                     }`}
                   >
                     <Art name={meta.art} className="h-8 w-8 shrink-0" />
@@ -183,6 +183,7 @@ export default function PlaygroundDetailPage() {
             <ul className="space-y-3">
               {QUESTIONS.map((question) => {
                 const medianValue = overall.perQuestion[question.id];
+                if (medianValue === null) return null;
                 const rounded = Math.round(medianValue);
                 const option = question.options[rounded] ?? question.options[0];
                 return (

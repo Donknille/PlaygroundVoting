@@ -12,8 +12,8 @@
 export type Mood = 0 | 1 | 2;
 
 const BG: Record<Mood, string> = {
-  0: "var(--color-sand-deep)",
-  1: "var(--color-yolk)",
+  0: "var(--color-line)",
+  1: "var(--color-sun)",
   2: "var(--color-sun)",
 };
 
@@ -73,8 +73,8 @@ export function Face({
 
       {mood > 0 ? (
         <>
-          <circle cx="5.8" cy="19" r="2.2" fill="var(--color-berry)" opacity="0.45" />
-          <circle cx="26.2" cy="19" r="2.2" fill="var(--color-berry)" opacity="0.45" />
+          <circle cx="5.8" cy="19" r="2.2" fill="var(--color-coral)" opacity="0.45" />
+          <circle cx="26.2" cy="19" r="2.2" fill="var(--color-coral)" opacity="0.45" />
         </>
       ) : null}
     </svg>

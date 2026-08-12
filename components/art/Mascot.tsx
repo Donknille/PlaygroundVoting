@@ -33,9 +33,9 @@ function Head({ mouth }: { mouth: Mouth }) {
     <g>
       {/* Ohren */}
       <path d="M41 32L33 6l23 13z" fill={ORANGE} />
-      <path d="M42.5 28.5L37.5 13l13 7.5z" fill="var(--color-berry-soft)" />
+      <path d="M42.5 28.5L37.5 13l13 7.5z" fill="var(--color-coral-soft)" />
       <path d="M79 32L87 6 64 19z" fill={ORANGE} />
-      <path d="M77.5 28.5L82.5 13l-13 7.5z" fill="var(--color-berry-soft)" />
+      <path d="M77.5 28.5L82.5 13l-13 7.5z" fill="var(--color-coral-soft)" />
 
       {/* Kopf */}
       <circle cx="60" cy="45" r="26" fill={ORANGE} />
@@ -103,7 +103,7 @@ function Body() {
       {/* Scout-Halstuch — das Erkennungszeichen der Figur */}
       <path d="M43 68c6 6 28 6 34 0l-5 6c-6 4-18 4-24 0z" fill="var(--color-coral)" />
       <path d="M52 73l8 16 8-16c-5 2.5-11 2.5-16 0z" fill="var(--color-coral)" />
-      <circle cx="60" cy="76" r="3.4" fill="var(--color-yolk)" />
+      <circle cx="60" cy="76" r="3.4" fill="var(--color-sun)" />
     </g>
   );
 }
@@ -113,8 +113,8 @@ function Binoculars() {
   return (
     <g>
       <rect x="53" y="36" width="14" height="10" rx="3" fill="var(--color-bark)" />
-      <circle cx="46" cy="41" r="10" fill="var(--color-plum)" />
-      <circle cx="74" cy="41" r="10" fill="var(--color-plum)" />
+      <circle cx="46" cy="41" r="10" fill="var(--color-sky)" />
+      <circle cx="74" cy="41" r="10" fill="var(--color-sky)" />
       <circle cx="46" cy="41" r="5" fill="var(--color-sky-soft)" />
       <circle cx="74" cy="41" r="5" fill="var(--color-sky-soft)" />
     </g>
@@ -189,12 +189,12 @@ export function Mascot({
           {/* Fragezeichen */}
           <path
             d="M93 30c0-5 4-8 8-8s8 3 8 7c0 5-6 6-7 10"
-            stroke="var(--color-plum)"
+            stroke="var(--color-sky)"
             strokeWidth="4"
             strokeLinecap="round"
             fill="none"
           />
-          <circle cx="101.5" cy="46" r="2.6" fill="var(--color-plum)" />
+          <circle cx="101.5" cy="46" r="2.6" fill="var(--color-sky)" />
         </>
       ) : (
         <>
@@ -207,11 +207,11 @@ export function Mascot({
           {/* Jubel-Funken */}
           <path
             d="M18 40l2.5 5 5 2.5-5 2.5L18 55l-2.5-5-5-2.5 5-2.5z"
-            fill="var(--color-yolk)"
+            fill="var(--color-sun)"
           />
           <path
             d="M102 34l2 4 4 2-4 2-2 4-2-4-4-2 4-2z"
-            fill="var(--color-yolk)"
+            fill="var(--color-sun)"
           />
         </>
       )}

@@ -19,7 +19,9 @@ export type GlyphName =
   | "muell"
   | "aktualisieren"
   | "info"
-  | "schliessen";
+  | "schliessen"
+  | "kind"
+  | "suche";
 
 const PATHS: Record<GlyphName, React.ReactNode> = {
   standort: (
@@ -63,6 +65,20 @@ const PATHS: Record<GlyphName, React.ReactNode> = {
     </>
   ),
   schliessen: <path d="M6 6l12 12M18 6L6 18" />,
+  /* Der Knopf in den Kinder-Modus — im Elternteil der einzige gelbe Punkt. */
+  kind: (
+    <>
+      <circle cx="12" cy="12" r="9.5" />
+      <path d="M8.2 14c1.7 2.3 6 2.3 7.6 0" />
+      <path d="M9 9.6v.01M15 9.6v.01" strokeWidth="2.6" />
+    </>
+  ),
+  suche: (
+    <>
+      <circle cx="11" cy="11" r="7" />
+      <path d="M16.2 16.2L21 21" />
+    </>
+  ),
   info: (
     <>
       <circle cx="12" cy="12" r="9" />

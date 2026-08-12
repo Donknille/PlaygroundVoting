@@ -3,7 +3,9 @@ import type { Metadata, Viewport } from "next";
 // Laufzeit, funktioniert offline und greift auch auf Android, wo die runde
 // Systemschrift ui-rounded fehlt.
 import "@fontsource-variable/fredoka/wght.css";
-import "@fontsource-variable/nunito/wght.css";
+import "@fontsource-variable/figtree/wght.css";
+import "@fontsource/ibm-plex-mono/400.css";
+import "@fontsource/ibm-plex-mono/500.css";
 import "./globals.css";
 import { ServiceWorker } from "@/components/ServiceWorker";
 
@@ -21,7 +23,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#ff9500",
+  themeColor: "#f5b700",
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",

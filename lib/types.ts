@@ -42,9 +42,16 @@ export type Playground = {
 export type Rating = {
   id: string;
   playgroundId: string;
+  /** Mitgeschrieben, damit der Profilverlauf nicht vom Kartencache abhängt. */
+  playgroundName?: string;
   age: number;
   ageGroup: AgeGroupId;
-  answers: Record<QuestionId, AnswerValue>;
+  /**
+   * Lückenhaft erlaubt: Der Kernweg fragt nur nach dem Spaß, die übrigen Fragen
+   * sind eine überspringbare Zusatzrunde. Eine übersprungene Frage ist etwas
+   * anderes als eine schlechte Antwort und wird deshalb nicht mitgerechnet.
+   */
+  answers: Partial<Record<QuestionId, AnswerValue>>;
   highlights: HighlightKey[];
   /** Auf den Tag gerundet – bewusst keine Uhrzeit, um Rückschlüsse zu vermeiden. */
   day: string;
