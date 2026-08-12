@@ -1,129 +1,279 @@
-# Geschäftsmodell — Spielplatz-Scouts
+# Geschäftsmodell Spielplatz-Scouts — durchgerechnet
 
-## Die Idee in einem Satz
-
-Kinder bewerten Spielplätze in 30 Sekunden mit Bildern, und Eltern finden dadurch Plätze in ihrer
-Nähe, von denen sie vorher nichts wussten — passend zum Alter ihres Kindes.
-
-## Warum das ein eigenes Produkt ist
-
-Bewertungen zu Spielplätzen existieren, aber sie messen das Falsche. Ein Google-Maps-Stern für
-einen Spielplatz sagt etwas über Parkplätze, Sauberkeit und Bänke — also darüber, wie angenehm der
-Nachmittag für die Erwachsenen war. Ob das Kind bleiben wollte, steht nirgends.
-
-Daraus folgt der Kern des Produkts: **Das Kind ist die Bewertungsquelle, nicht der Elternteil.**
-Und weil ein Kletterturm für Zehnjährige großartig und für Zweijährige unbrauchbar ist, gibt es
-nie einen Gesamtstern, sondern immer einen Wert je Altersgruppe. Das ist gleichzeitig der
-Datensatz, den sonst niemand hat.
+Anlass: die Frage, ob sich das Produkt über Werbung finanzieren lässt.
+Ergebnis vorweg: **rechnerisch nicht** — und der Versuch würde den ertragreichsten Pfad zerstören.
+Die Begründung steht in Abschnitt 4.
 
 ---
 
-## Wertversprechen
+## 0. Wie dieses Dokument zu lesen ist
 
-| Zielgruppe | Nutzen |
-|---|---|
-| **Eltern** | In fünf Sekunden sehen, welcher Platz in der Nähe für *dieses* Kind taugt — inklusive Plätzen, die sie nicht kannten. |
-| **Kinder** | Ein Spiel mit Bildern statt eines Formulars, mit Belohnung am Ende. |
-| **Kommunen** | Laufende, gesetzlich geforderte Kinderbeteiligung ohne Workshop-Aufwand — als Datengrundlage für Sanierungsbudgets. |
-| **Hersteller / Planungsbüros** | Welche Gerätetypen begeistern welche Altersgruppe wirklich? |
+Zwei Sorten Zahlen, sauber getrennt:
 
-## Erlösmodell
+- **Rechnung** — folgt zwingend aus den Annahmen. Nachvollziehbar, nicht strittig.
+- **Annahme (A1, A2, …)** — geschätzt. Jede ist einzeln benannt, damit sie ersetzt werden kann.
 
-**1. B2G — Kommunen-Dashboard (Hauptumsatz).**
-Jahreslizenz gestaffelt nach Einwohnerzahl: 490 € (bis 20.000), 1.490 € (bis 100.000),
-2.900 € (darüber). Enthält Ranking aller eigenen Plätze je Altersgruppe, Schwachstellenanalyse je
-Frage, Trend nach Sanierungen, Export für Gemeinderatsvorlagen, QR-Schilder für die Plätze.
-
-Verkaufsargument: Die Beteiligung von Kindern und Jugendlichen an sie betreffenden Planungen ist
-vorgeschrieben (§ 1 Abs. 3 SGB VIII, Gemeindeordnungen der Länder, § 3 BauGB). Bisher wird das mit
-einmaligen Workshops erfüllt — teuer, punktuell, zwölf Kinder. Ein einzelner moderierter Workshop
-kostet meist mehr als eine Jahreslizenz und liefert eine Momentaufnahme statt einer Zeitreihe.
-
-**2. B2C — „Scouts Plus" für Eltern.**
-2,99 €/Monat oder 19 €/Jahr: Offline-Karte, Filter (Schatten, Zaun, Wasser, WC, Wickeltisch,
-Kinderwagen), Merklisten und Ausflugsrouten, mehrere Kinderprofile, Hinweis bei neuen Plätzen im
-Umkreis. **Die Kernsuche bleibt dauerhaft gratis** — sie ist das, was die Datenbasis erzeugt.
-
-**3. B2B — Datenlizenzen.**
-Anonymisierte Aggregat-Reports für Spielgerätehersteller und Landschaftsarchitekten: welche
-Gerätetypen in welchen Altersgruppen wie abschneiden.
-
-**4. Regionen und Tourismus.**
-Whitelabel-Widget „Spielplätze der Region" für Ferienregionen, Campingplätze, Freizeitparks.
-
-**5. Partnerschaften statt Werbung.**
-Krankenkassen (Bewegungsförderung), Stadtwerke, Familienkarten — sichtbar ausschließlich im
-Elternbereich, **niemals im Kinder-Modus**, ohne Tracking.
-
-### Warum keine Werbung im Kinder-Modus
-
-Kindgerichtete Werbung ist rechtlich heikel (UWG Anhang Nr. 28) und würde genau das Vertrauen
-zerstören, das gegenüber Kommunen das eigentliche Verkaufsargument ist. Werbefreiheit und
-Datensparsamkeit werden deshalb aktiv als Produktmerkmal kommuniziert, nicht als Verzicht
-behandelt.
-
-## Kaltstart
-
-Das Verzeichnis ist ab Tag 1 vollständig: alle Spielplätze kommen aus OpenStreetMap
-(`leisure=playground`, ODbL, rund 100.000 Einträge allein in Deutschland). Bewertungen sind die
-Anreicherung, nicht die Voraussetzung. Ein Platz ohne Stimmen zeigt „Noch keine Bewertung — sei
-die Erste!" statt einer leeren Liste.
-
-## Go-to-Market
-
-Stadt für Stadt, beginnend mit einem Piloten. Kita- und Grundschulkooperationen
-(„Spielplatz-Detektiv-Woche") bringen die ersten hundert Bewertungen pro Stadtteil.
-Eltern-Communities und Stadtteilgruppen tragen es weiter. Sobald eine Kommune zahlender Kunde ist,
-kommen QR-Schilder direkt an die Plätze — sie sind gleichzeitig Wachstumsmotor und der Grund,
-warum Kommunen zahlen.
-
-## Kennzahlen
-
-- **Abdeckungsgrad**: Anteil der Plätze einer Stadt mit ≥ 3 Bewertungen (die eigentliche
-  Nordstern-Kennzahl — darunter ist das Produkt für Eltern wertlos)
-- Bewertungen pro Sitzung
-- Wiederkehrende Familien pro Monat
-- Kommunenverträge
-- Verteilung der Bewertungen über die Altersgruppen
-
-## Risiken und Antworten
-
-| Risiko | Antwort |
-|---|---|
-| DSGVO Art. 8 (Daten von Kindern) | Kein Login, kein Konto, keine Namen, keine Fotos, keine Freitexte, kein Tracking. Gespeichert werden nur Spielplatz-ID, Altersgruppe, fünf Antworten und der Tag. Der Standort verlässt das Gerät nicht. |
-| Fake- und Spam-Bewertungen | Ein Votum pro Gerät, Platz und Tag; Plausibilitätsprüfung über Standortnähe; Median statt Mittelwert; Punkte erst ab drei Stimmen. |
-| Overpass-Ausfall oder Rate-Limit | 24-Stunden-Cache im Gerät, auf ~1 km gerundete Abfragen, sichtbarer Demo-Fallback. |
-| „Mein Kind tippt nur das lachende Gesicht" | Die Frage nach der Verweildauer als Gegencheck, Median-Auswertung, Mindestzahl an Stimmen, farblich identische Antwortoptionen. |
-| Kommunen kaufen nicht | Der B2C-Teil funktioniert eigenständig; das Dashboard ist eine Auswertung ohnehin vorhandener Daten, keine getrennte Produktlinie. |
+⚠️ Ich hatte beim Erstellen **keinen Zugriff auf Marktdatenbanken**. Die Strukturzahlen
+(Gemeinden, Familien, Werbepreise) stammen aus allgemeinem Wissen und sind Größenordnungen.
+Vor einer Finanzierungsrunde oder einem Kredit gehören sie geprüft. Die *Struktur* des Modells
+und die Verhältnisse zwischen den Pfaden ändern sich dadurch aber kaum — dafür sind die
+Abstände zu groß.
 
 ---
 
-## Erfolgskriterien
+## 1. Der Markt in Zahlen
 
-Die drei ursprünglichen Kriterien, ergänzt um fünf, die sich aus dem Geschäftsmodell ergeben:
+### Kommunen (B2G)
 
-1. **Schnell und einfach bedienbar** — eine Bewertung dauert unter 30 Sekunden, alles liegt in
-   Daumenreichweite, Touchziele ab 56 px.
-2. **Bewertungsmaßstab transparent** — Fragen, Gewichtung und Altersgruppe sind von jedem
-   Punktwert aus einen Tipp entfernt; jeder Wert trägt seine Herkunft im Text.
-3. **Spielplätze schnell finden** — Treffer ohne Suchfeld, direkt beim Öffnen der App.
-4. **Ohne Lesen bedienbar** *(neu)* — Bilder plus Vorlesefunktion; Kinder ab drei kommen ohne
-   Erwachsene durch.
-5. **Ab Tag 1 gefüllt** *(neu)* — kein leeres Verzeichnis, OpenStreetMap liefert die Basis.
-6. **Datensparsamkeit sichtbar** *(neu)* — kein Login, keine Personendaten, und das wird im
-   Produkt erklärt statt im Kleingedruckten versteckt.
-7. **Auswertbar für Kommunen** *(neu)* — strukturierte Antworten mit Altersgruppe statt Freitext.
-8. **Unterwegs tauglich** *(neu)* — am Spielplatz ist das Netz schwach: PWA, Cache, lokale Abgabe.
+| | Zahl | Herkunft |
+|---|---|---|
+| Gemeinden in Deutschland | ~10.750 | Strukturzahl |
+| davon ab 10.000 Einwohnern | ~2.100 | **A1** |
+| davon realistisch ansprechbar — eigenes Grünflächenamt, Beteiligungs- oder Digitalisierungsbudget, spürbarer Sanierungsstau | **600–900** | **A2** |
 
-### Wie die Umsetzung darauf einzahlt
+Das ist der eigentliche Zielmarkt: **rund 750 Kommunen**, nicht 10.750.
 
-| Kriterium | Umsetzung im Code |
+Preisstaffel nach Einwohnerzahl:
+
+| Größe | Jahreslizenz |
 |---|---|
-| 1 | Auto-Weiterschalten nach jedem Tipp, ein Bildschirm pro Frage, `tap`-Utility mit 56 px Mindestgröße |
-| 2 | `lib/questions.ts` als einzige Quelle für Kinder-Modus **und** Transparenzseite; Herkunftstext an jedem Punktwert |
-| 3 | Standortabfrage beim Start, Liste nach Entfernung, kein Suchfeld nötig |
-| 4 | Emoji-Antworten, `lib/speech.ts` (Web Speech API), Vorlesen automatisch bei jeder Frage |
-| 5 | `lib/overpass.ts` mit OSM-Abfrage und Gerätecache |
-| 6 | `/datenschutz` mit Löschknopf, keine Analytics-Abhängigkeit im Projekt |
-| 7 | Feste Antwortskala 0/1/2 plus Altersgruppe in jedem Datensatz (`lib/types.ts`) |
-| 8 | `public/sw.js`, Manifest, `localStorage`-Cache mit 24-Stunden-TTL |
+| unter 20.000 | 490 € |
+| 20.000–100.000 | 1.490 € |
+| über 100.000 | 2.900 € |
+
+Mischpreis über eine realistische Kundenverteilung: **~900 €/Jahr** (**A3**).
+
+### Eltern (B2C)
+
+| | Zahl |
+|---|---|
+| Haushalte mit Kindern unter 10 Jahren | ~5 Mio (**A4**) |
+| davon über drei Jahre erreichbar (Nischen-App, ohne Werbebudget) | 0,2 %–1 % → **10.000–50.000 aktive Familien** (**A5**) |
+
+„Aktiv" heißt: öffnet die App mindestens einmal im Quartal.
+
+---
+
+## 2. Die fünf Erlöspfade
+
+### Pfad 1 — Kommunen-Lizenzen
+
+`Anzahl Kommunen × 900 €`
+
+Der Grund, warum es funktioniert: Kinderbeteiligung ist keine freiwillige Leistung.
+§ 47f GemO BW, § 1 Abs. 3 SGB VIII und § 3 BauGB verpflichten dazu. Ein einmaliger
+Beteiligungsworkshop kostet eine Kommune schnell 5.000–15.000 € und liefert eine Momentaufnahme.
+Die Lizenz liefert laufende Daten für einen Bruchteil davon.
+
+**Wichtig:** Dieser Pfad ist erst lieferbar, wenn Bewertungen zentral gespeichert werden.
+Siehe Abschnitt 7.
+
+### Pfad 2 — Eltern-Abo „Scouts Plus"
+
+`aktive Familien × Umwandlungsquote × 19 €/Jahr`
+
+Umwandlungsquote bei Freemium-Apps ohne aggressive Bezahlschranke: **1–3 %** (**A6**).
+Die Kernsuche bleibt dauerhaft gratis — das ist Bedingung, nicht Großzügigkeit: Ohne freie
+Nutzung entstehen keine Bewertungen, ohne Bewertungen gibt es kein Kommunenprodukt.
+
+### Pfad 3 — Benannte Sponsoren
+
+Ein festes Logo im Elternbereich, kein Werbenetzwerk, kein Tracking, kein Einwilligungsbanner.
+Kandidaten: Stadtwerke, Krankenkassen, regionale Familienkarten, Sparkassen-Stiftungen.
+
+Regional realistisch: **3.000–5.000 €/Jahr je Partner** (**A7**), 1–6 Partner.
+
+### Pfad 4 — Datenlizenzen an Hersteller
+
+Spielgerätehersteller und Landschaftsarchitekten im deutschsprachigen Raum: ~25 relevante Firmen.
+Verkauft wird ein Benchmark: Welcher Gerätetyp begeistert welche Altersgruppe wirklich?
+Diese Auswertung existiert sonst nirgends.
+
+**6.000–8.000 €/Jahr je Lizenz** (**A8**) — aber frühestens ab etwa 5.000 Bewertungen,
+sonst ist die Aussage statistisch wertlos.
+
+### Pfad 5 — Präventionsförderung (Anschub, nicht wiederkehrend)
+
+Krankenkassen **müssen** nach § 20 SGB V jährlich einen festen Betrag je Versichertem für
+Prävention und Gesundheitsförderung ausgeben. Bewegungsförderung bei Kindern im Setting-Ansatz
+fällt genau darunter. Das ist ein Fördertopf, kein Werbebudget.
+
+Projektförderungen dieser Art liegen typisch bei **20.000–80.000 €** über ein bis drei Jahre
+(**A9**). Einmalig, aber als Anschubfinanzierung genau in der Phase, in der sonst nichts
+hereinkommt.
+
+---
+
+## 3. Kostenstruktur
+
+### Betrieb
+
+| Posten | Heute | Mit Server, kleine Last | Mittlere Last |
+|---|---|---|---|
+| Hosting | 0 € | 0 € | 0–20 €/Mon. |
+| Datenbank | — | 0–25 €/Mon. | 25–100 €/Mon. |
+| Overpass-Zwischenspeicher (eigene kleine Maschine) | — | 20–40 €/Mon. | 40 €/Mon. |
+| Domain | 15 €/Jahr | 15 €/Jahr | 15 €/Jahr |
+| **Summe** | **~0 €** | **~300–800 €/Jahr** | **~800–1.900 €/Jahr** |
+
+Der Betrieb ist vernachlässigbar. Das ist die gute Nachricht.
+
+### Arbeit — der eigentliche Kostenblock
+
+| Modell | Jahreskosten |
+|---|---|
+| Nebenprojekt, unbezahlt | 0 € |
+| Eine Vollzeitstelle (Vollkosten inkl. Abgaben) | ~75.000 € (**A10**) |
+| Zwei Stellen (Entwicklung + Vertrieb) | ~150.000 € |
+
+**Kommunenvertrieb ist der Aufwandstreiber.** Ein Abschluss braucht realistisch 3–8 Kontakte
+über 6–18 Monate, weil Haushaltsjahre und Gremienbeschlüsse den Takt vorgeben (**A11**).
+
+---
+
+## 4. Werbung gegengerechnet
+
+Die Ausgangsfrage. Annahmen: 20 Einblendungen je aktiver Familie und Monat (**A12**),
+TKP für **nicht-personalisierte** Anzeigen im deutschsprachigen Raum 0,50–1,50 € (**A13**).
+
+Nicht-personalisiert ist keine Wahl, sondern Pflicht: DSA Art. 28 Abs. 2 verbietet
+profilbasierte Werbung an Minderjährige, und im Kinder-Modus ist Werbung nach UWG Anhang Nr. 28
+ohnehin ausgeschlossen.
+
+| Aktive Familien | Einblendungen/Jahr | Werbeerlös/Jahr |
+|---|---|---|
+| 8.000 | 1,9 Mio | **960–2.880 €** |
+| 20.000 | 4,8 Mio | **2.400–7.200 €** |
+| 50.000 | 12,0 Mio | **6.000–18.000 €** |
+
+Dagegengehalten: **35 Kommunen bringen 31.500 €/Jahr.**
+
+Selbst im günstigsten Werbeszenario — 50.000 aktive Familien, oberer TKP — liegt der Werbeerlös
+bei 18.000 €. Das entspricht 20 Kommunen. 50.000 Familien zu gewinnen ist ungleich schwerer als
+20 Kommunen zu überzeugen.
+
+**Und die Kosten der Werbung sind nicht die Einblendungen, sondern:**
+
+1. Ein Einwilligungsbanner als erster Klick — direkt gegen „in fünf Sekunden zum Ziel".
+2. Das Verkaufsargument gegenüber Kommunen entfällt. Eine Kommune, die Kinderbeteiligung
+   ausschreibt, nimmt keine App, die Kinderdaten an ein Werbenetzwerk weitergibt.
+3. Krankenkassen und Stiftungen fördern keine werbefinanzierten Kinderangebote.
+
+**Werbung tauscht 2.000–18.000 € gegen die Pfade 1, 3 und 5.** Das ist der Kern der Antwort.
+
+---
+
+## 5. Drei Szenarien, Stand Jahr 3
+
+### Vorsichtig
+
+| Pfad | Rechnung | Betrag |
+|---|---|---|
+| Kommunen | 12 × 900 € | 10.800 € |
+| Plus-Abo | 8.000 × 1 % × 19 € | 1.520 € |
+| Sponsoring | 1 Partner | 3.000 € |
+| **Summe** | | **15.320 €/Jahr** |
+
+### Realistisch
+
+| Pfad | Rechnung | Betrag |
+|---|---|---|
+| Kommunen | 35 × 950 € | 33.250 € |
+| Plus-Abo | 20.000 × 2 % × 19 € | 7.600 € |
+| Sponsoring | 3 Partner | 12.000 € |
+| Datenlizenz | 1 | 6.000 € |
+| **Summe** | | **58.850 €/Jahr** |
+
+### Gut
+
+| Pfad | Rechnung | Betrag |
+|---|---|---|
+| Kommunen | 90 × 1.100 € | 99.000 € |
+| Plus-Abo | 50.000 × 3 % × 19 € | 28.500 € |
+| Sponsoring | 6 Partner | 30.000 € |
+| Datenlizenzen | 3 | 24.000 € |
+| **Summe** | | **181.500 €/Jahr** |
+
+Selbst das gute Szenario bleibt bei 90 von ~750 erreichbaren Kommunen — also 12 % Marktanteil.
+Das ist ehrgeizig, aber nicht absurd.
+
+---
+
+## 6. Ab wann trägt es sich
+
+| Aufstellung | Bedarf/Jahr | Erreicht bei | Frühestens |
+|---|---|---|---|
+| Nebenprojekt, unbezahlt | ~800 € | 1 Kommune | **Jahr 1** |
+| Eine Vollzeitstelle | ~76.000 € | ~55 Kommunen + übrige Pfade | **Jahr 3–4** |
+| Zwei Stellen | ~152.000 € | nur im guten Szenario | Jahr 4–5 |
+
+**Die entscheidende Erkenntnis:** Als Nebenprojekt trägt es sich fast sofort. Als Vollzeitgeschäft
+braucht es drei bis vier Jahre. Dazwischen liegt eine Finanzierungslücke, die genau Pfad 5
+(Präventionsförderung) schließen kann — deshalb steht er im Plan.
+
+---
+
+## 7. Der kritische Pfad
+
+Die Reihenfolge ist nicht beliebig:
+
+1. **Server für geteilte Bewertungen.** ⚠️ Heute liegen alle Bewertungen im localStorage des
+   jeweiligen Geräts. Sie sind für niemanden sonst sichtbar. **Ohne zentrale Speicherung gibt es
+   kein Kommunenprodukt, keine Datenlizenz und keinen Grund für ein Eltern-Abo.**
+   Das ist die größte Lücke zwischen dem heutigen Produkt und diesem Geschäftsmodell.
+2. **Datendichte in einer Pilotstadt.** Zielmarke: mindestens 3 Bewertungen auf 30 % der Plätze.
+   Vorher ist das Dashboard leer und unverkäuflich.
+3. **Kommunen-Dashboard.** Ranking, Altersverteilung, Trend, Export für Gemeinderatsvorlagen.
+4. **Erste Referenzkommune** — idealerweise vergünstigt, dafür mit Nennungsrecht.
+5. **Skalierung über die Referenz.** Kommunen kaufen, was die Nachbarkommune schon nutzt.
+
+Schritt 1 und 2 kosten Arbeit, aber kaum Geld. Sie sind die Voraussetzung für alles Weitere.
+
+---
+
+## 8. Wo der Hebel liegt
+
+Sensitivität, ausgehend vom realistischen Szenario:
+
+| Änderung | Wirkung auf den Jahresumsatz |
+|---|---|
+| **+10 Kommunen** | **+9.500 €** |
+| +10.000 aktive Familien | +3.800 € |
+| +1 Sponsor | +4.000 € |
+| Preis je Lizenz +10 % | +3.325 € |
+| Umwandlungsquote 2 % → 3 % | +3.800 € |
+
+Um den Effekt von zehn zusätzlichen Kommunen über Abos zu erreichen, bräuchte es
+**25.000 zusätzliche aktive Familien**.
+
+Daraus folgt die ganze Prioritätensetzung: **Der Vertrieb an Kommunen ist die Arbeit, die zählt.**
+Nutzerwachstum ist wichtig — aber als *Voraussetzung* für den Kommunenverkauf, nicht als
+eigener Erlöspfad.
+
+---
+
+## 9. Was das Modell kippen würde
+
+| Risiko | Wirkung | Gegenmaßnahme |
+|---|---|---|
+| **Kaltstart je Stadt** | Ohne Bewertungen kein Verkaufsargument | Kita- und Grundschulkooperationen, „Spielplatz-Detektiv-Woche" |
+| **Lange Beschaffungszyklen** | 6–18 Monate bis zum ersten Euro | Pfad 5 als Überbrückung, Pilot vergünstigt abgeben |
+| **Klumpenrisiko B2G** | 56 % des Umsatzes aus einem Pfad | Sponsoring und Datenlizenzen früh aufbauen |
+| **Wettbewerber mit Kapital** | Kopiert das Konzept, kauft Reichweite | Vorsprung liegt im Datenbestand, nicht im Code — Datendichte ist der Burggraben |
+| **Personenabhängigkeit** | Ein Ausfall stoppt alles | Ab Jahr 2 einplanen |
+| **OSM-Datenqualität** | Regional sehr unterschiedlich | Nacherfassung durch Nutzer ermöglichen |
+
+---
+
+## 10. Empfehlung
+
+1. **Kostenlos für alle Nutzer bleiben** — richtig, und Voraussetzung für alles andere.
+2. **Werbefreiheit als ausdrückliches Produktversprechen führen**, nicht als Verzicht.
+   Sie ist das Verkaufsargument im ertragreichsten Pfad.
+3. **Keine Werbeplätze bauen.** Rechnerisch bringen sie im realistischen Szenario etwa 4.000 €
+   und kosten mindestens 45.000 €.
+4. **Zuerst den Server für geteilte Bewertungen bauen.** Ohne ihn ist das Geschäftsmodell
+   nicht lieferbar — egal welcher Pfad.
+5. **Dann eine Pilotstadt mit Datendichte, dann das Kommunen-Dashboard, dann Vertrieb.**
+6. **Präventionsförderung parallel beantragen**, um die Lücke bis zu den ersten
+   Lizenzeinnahmen zu schließen.
