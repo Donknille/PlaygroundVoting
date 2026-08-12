@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Art } from "@/components/art/Art";
+import { Pictogram } from "@/components/art/Pictogram";
 import { AppHeader } from "@/components/AppHeader";
 import { MIN_RATINGS_FOR_SCORE } from "@/lib/config";
 import {
@@ -29,7 +31,7 @@ export default function ScalePage() {
       <main id="inhalt" className="mx-auto max-w-2xl space-y-6 px-4 py-6">
         <section className="space-y-2">
           <h1 className="text-3xl font-extrabold leading-tight">So bewerten wir</h1>
-          <p className="text-ink-soft">
+          <p className="font-semibold text-ink-soft">
             Jeder Punktwert in dieser App entsteht aus genau fünf Fragen, die Kinder
             beantworten. Hier steht vollständig, welche das sind, wie stark jede zählt und was
             bewusst <em>nicht</em> einfließt.
@@ -37,8 +39,8 @@ export default function ScalePage() {
         </section>
 
         <section className="card space-y-3 p-4">
-          <h2 className="text-xl font-extrabold">Wer bewertet</h2>
-          <p className="text-ink-soft">
+          <h2 className="text-xl font-bold">Wer bewertet</h2>
+          <p className="font-semibold text-ink-soft">
             Das Kind selbst — nicht die Eltern. Die einzige Angabe, die wir dazu erfassen, ist
             das Alter. Kein Name, kein Konto, kein Foto, kein Standort auf unseren Servern.
           </p>
@@ -48,13 +50,15 @@ export default function ScalePage() {
         </section>
 
         <section className="space-y-3">
-          <h2 className="text-xl font-extrabold">Die fünf Fragen</h2>
+          <h2 className="text-xl font-bold">Die fünf Fragen</h2>
           {QUESTIONS.map((question, index) => (
             <article key={question.id} className="card space-y-3 p-4">
               <div className="flex items-start justify-between gap-3">
-                <h3 className="text-lg font-bold leading-tight">
-                  <span aria-hidden="true">{question.emoji}</span> {index + 1}.{" "}
-                  {question.prompt}
+                <h3 className="flex items-center gap-2 font-display text-lg leading-tight font-bold">
+                  <Art name={question.art} className="h-8 w-8 shrink-0" />
+                  <span>
+                    {index + 1}. {question.prompt}
+                  </span>
                 </h3>
                 <span
                   className={`shrink-0 rounded-full px-3 py-1 text-sm font-bold ${
@@ -73,9 +77,7 @@ export default function ScalePage() {
                     key={option.label}
                     className="flex flex-col items-center gap-1 rounded-2xl bg-sand-deep p-2 text-center"
                   >
-                    <span className="text-3xl" aria-hidden="true">
-                      {option.emoji}
-                    </span>
+                    <Art name={option.art} className="h-10 w-10" />
                     <span className="text-xs font-bold leading-tight">{option.label}</span>
                     <span className="text-xs text-ink-soft">
                       {ANSWER_POINTS[optionIndex as 0 | 1 | 2]}{" "}
@@ -85,13 +87,13 @@ export default function ScalePage() {
                 ))}
               </ul>
 
-              <p className="text-sm text-ink-soft">{question.explain}</p>
+              <p className="text-sm font-semibold text-ink-soft">{question.explain}</p>
             </article>
           ))}
         </section>
 
         <section className="card space-y-3 p-4">
-          <h2 className="text-xl font-extrabold">Wie daraus Punkte werden</h2>
+          <h2 className="text-xl font-bold">Wie daraus Punkte werden</h2>
           <ol className="list-decimal space-y-2 pl-5 text-ink-soft">
             <li>
               Jede Antwort wird zu Punkten: links = 1, Mitte = 3, rechts = 5.
@@ -126,7 +128,7 @@ export default function ScalePage() {
             </p>
           </div>
 
-          <p className="text-sm text-ink-soft">
+          <p className="text-sm font-semibold text-ink-soft">
             Punkte zeigen wir erst ab <strong>{MIN_RATINGS_FOR_SCORE} Bewertungen</strong> je
             Altersgruppe. Darunter steht die Zahl der Stimmen, aber kein Wert — eine einzelne
             Meinung ist kein Urteil.
@@ -134,17 +136,15 @@ export default function ScalePage() {
         </section>
 
         <section className="card space-y-3 p-4">
-          <h2 className="text-xl font-extrabold">Warum das Alter alles verändert</h2>
-          <p className="text-ink-soft">
+          <h2 className="text-xl font-bold">Warum das Alter alles verändert</h2>
+          <p className="font-semibold text-ink-soft">
             Ein Kletterturm ist für Zehnjährige großartig und für Zweijährige unbrauchbar.
             Deshalb gibt es keinen einzelnen Gesamtstern, sondern einen Wert je Altersgruppe:
           </p>
           <ul className="grid grid-cols-2 gap-2">
             {AGE_GROUPS.map((group) => (
               <li key={group.id} className="rounded-2xl bg-sand-deep p-3">
-                <span className="text-2xl" aria-hidden="true">
-                  {group.emoji}
-                </span>
+                <Art name={group.art} className="h-8 w-8" />
                 <span className="block font-bold">{group.label}</span>
                 <span className="block text-sm text-ink-soft">{group.short} Jahre</span>
               </li>
@@ -153,7 +153,7 @@ export default function ScalePage() {
         </section>
 
         <section className="card space-y-3 p-4">
-          <h2 className="text-xl font-extrabold">Was bewusst nicht einfließt</h2>
+          <h2 className="text-xl font-bold">Was bewusst nicht einfließt</h2>
           <ul className="list-disc space-y-2 pl-5 text-ink-soft">
             <li>
               <strong>Schatten.</strong> Wird gefragt, zählt aber nicht zu den Spaß-Punkten.
@@ -171,7 +171,7 @@ export default function ScalePage() {
         </section>
 
         <section className="card space-y-3 p-4">
-          <h2 className="text-xl font-extrabold">Regeln gegen Verzerrung</h2>
+          <h2 className="text-xl font-bold">Regeln gegen Verzerrung</h2>
           <ul className="list-disc space-y-2 pl-5 text-ink-soft">
             <li>
               Die drei Antworten sehen <strong>immer gleich aus</strong> — gleiche Farbe,
@@ -190,8 +190,8 @@ export default function ScalePage() {
         </section>
 
         <section className="card space-y-3 p-4">
-          <h2 className="text-xl font-extrabold">Was war am besten?</h2>
-          <p className="text-ink-soft">
+          <h2 className="text-xl font-bold">Was war am besten?</h2>
+          <p className="font-semibold text-ink-soft">
             Nach den fünf Fragen dürfen Kinder ihr Lieblingsgerät auswählen. Das zählt nicht in
             die Punkte, zeigt Eltern aber sofort, was den Platz ausmacht:
           </p>
@@ -201,7 +201,7 @@ export default function ScalePage() {
                 key={item.key}
                 className="flex items-center gap-1.5 rounded-full bg-plum-soft px-3 py-1.5 text-sm font-medium"
               >
-                <span aria-hidden="true">{item.emoji}</span>
+                <Art name={item.art} className="h-6 w-6" />
                 {item.label}
               </li>
             ))}
@@ -209,13 +209,15 @@ export default function ScalePage() {
         </section>
 
         <section id="demo" className="card space-y-3 border-2 border-dashed border-sun p-4">
-          <h2 className="text-xl font-extrabold">🧪 Über den Demo-Modus</h2>
-          <p className="text-ink-soft">
+          <h2 className="flex items-center gap-2 text-xl font-bold">
+            <Pictogram name="kolben" className="h-7 w-7" /> Über den Demo-Modus
+          </h2>
+          <p className="font-semibold text-ink-soft">
             Wenn keine Verbindung zu OpenStreetMap besteht oder du den Demo-Modus selbst
             startest, zeigt die App <strong>erfundene Spielplätze mit generierten
             Bewertungen</strong>. Sie sind überall als Demo gekennzeichnet.
           </p>
-          <p className="text-ink-soft">
+          <p className="font-semibold text-ink-soft">
             Echte Spielplätze zeigen ausschließlich echte Stimmen. Ein Platz ohne Bewertungen
             bleibt sichtbar unbewertet — wir füllen ihn nicht künstlich auf.
           </p>

@@ -2,6 +2,11 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { Art } from "@/components/art/Art";
+import { Glyph } from "@/components/art/Glyph";
+import { Mascot } from "@/components/art/Mascot";
+import { Pictogram } from "@/components/art/Pictogram";
+import { QUESTION_TINTS } from "@/components/art/Scene";
 import { KidProgressDots, KidQuestion, SpeakButton } from "@/components/KidFlow";
 import { RewardScreen } from "@/components/RewardScreen";
 import { useQueryParam } from "@/lib/hooks";
@@ -68,17 +73,14 @@ export default function KidRatingPage() {
     return (
       <FullScreen>
         <div className="flex flex-1 flex-col items-center justify-center gap-4 text-center">
-          <span className="text-6xl" aria-hidden="true">
-            🤔
-          </span>
-          <h1 className="text-2xl font-extrabold">Diesen Spielplatz kennen wir nicht</h1>
-          <p className="text-ink-soft">
+          <Mascot pose="fragt" className="h-36 w-36" />
+          <h1 className="font-display text-2xl font-bold">
+            Diesen Spielplatz kennen wir nicht
+          </h1>
+          <p className="font-semibold text-ink-soft">
             Öffne ihn noch einmal aus der Liste, dann klappt das Bewerten.
           </p>
-          <Link
-            href="/"
-            className="tap flex items-center justify-center rounded-2xl bg-ink px-6 text-lg font-bold text-white"
-          >
+          <Link href="/" className="btn btn-ink">
             Zur Spielplatzliste
           </Link>
         </div>
@@ -88,7 +90,7 @@ export default function KidRatingPage() {
 
   if (done) {
     return (
-      <FullScreen>
+      <FullScreen tint="var(--color-mint-soft)">
         <RewardScreen
           playgroundId={id}
           playgroundName={playground.name}
@@ -102,17 +104,17 @@ export default function KidRatingPage() {
     return (
       <FullScreen>
         <div className="flex flex-1 flex-col items-center justify-center gap-4 text-center">
-          <span className="text-7xl" aria-hidden="true">
-            ✅
-          </span>
-          <h1 className="text-2xl font-extrabold">Heute schon bewertet!</h1>
-          <p className="text-ink-soft">
+          <div className="flex h-24 w-24 items-center justify-center rounded-full bg-grass text-white">
+            <Glyph name="haken" className="h-14 w-14" />
+          </div>
+          <h1 className="font-display text-2xl font-bold">Heute schon bewertet!</h1>
+          <p className="font-semibold text-ink-soft">
             {playground.name} wurde von diesem Gerät heute bereits bewertet. Morgen geht es
             wieder — so bleiben die Punkte ehrlich.
           </p>
           <Link
             href={`/spielplatz/?id=${encodeURIComponent(id)}`}
-            className="tap flex items-center justify-center rounded-2xl bg-ink px-6 text-lg font-bold text-white"
+            className="btn btn-ink"
           >
             Ergebnis ansehen
           </Link>
@@ -125,7 +127,7 @@ export default function KidRatingPage() {
   const currentQuestion = QUESTIONS[questionIndex];
 
   return (
-    <FullScreen>
+    <FullScreen tint={QUESTION_TINTS[step % QUESTION_TINTS.length]}>
       <div className="flex items-center justify-between gap-2 pb-2">
         <button
           type="button"
@@ -133,11 +135,11 @@ export default function KidRatingPage() {
             stopSpeaking();
             if (step > 0) setStep(step - 1);
           }}
-          className="tap flex items-center justify-center rounded-full bg-white px-4 text-2xl shadow-sm ring-1 ring-black/5 disabled:opacity-30"
+          className="btn btn-white tap aspect-square !px-0 disabled:opacity-30"
           disabled={step === 0}
           aria-label="Eine Frage zurück"
         >
-          ←
+          <Glyph name="zurueck" className="h-7 w-7" />
         </button>
 
         <KidProgressDots total={TOTAL_STEPS} current={step} />
@@ -149,19 +151,19 @@ export default function KidRatingPage() {
               setMuted((value) => !value);
               stopSpeaking();
             }}
-            className="tap flex items-center justify-center rounded-full bg-white px-4 text-2xl shadow-sm ring-1 ring-black/5"
+            className="btn btn-white tap aspect-square !px-0"
             aria-label={muted ? "Vorlesen einschalten" : "Vorlesen ausschalten"}
             aria-pressed={!muted}
           >
-            {muted ? "🔇" : "🔊"}
+            <Glyph name={muted ? "stumm" : "lautsprecher"} className="h-7 w-7" />
           </button>
           <Link
             href={`/spielplatz/?id=${encodeURIComponent(id)}`}
             onClick={() => stopSpeaking()}
-            className="tap flex items-center justify-center rounded-full bg-white px-4 text-2xl shadow-sm ring-1 ring-black/5"
+            className="btn btn-white tap aspect-square !px-0"
             aria-label="Bewerten abbrechen"
           >
-            ✕
+            <Glyph name="schliessen" className="h-7 w-7" />
           </Link>
         </div>
       </div>
@@ -180,7 +182,7 @@ export default function KidRatingPage() {
         <KidQuestion
           key={currentQuestion.id}
           prompt={currentQuestion.prompt}
-          emoji={currentQuestion.emoji}
+          art={currentQuestion.art}
           options={currentQuestion.options}
           muted={muted}
           speakOnMount={currentQuestion.prompt}
@@ -210,9 +212,22 @@ export default function KidRatingPage() {
   );
 }
 
-function FullScreen({ children }: { children: React.ReactNode }) {
+/**
+ * Vollbild mit Farbton je Schritt. Der Farbwechsel ist der eigentliche
+ * Fortschrittsanzeiger für Kinder, die die Punktleiste oben nicht deuten.
+ */
+function FullScreen({
+  children,
+  tint,
+}: {
+  children: React.ReactNode;
+  tint?: string;
+}) {
   return (
-    <div className="flex min-h-dvh flex-col bg-sand px-3 py-3">
+    <div
+      className="flex min-h-dvh flex-col px-3 py-3 transition-colors duration-500"
+      style={{ background: tint ?? "var(--color-sand)" }}
+    >
       <main id="inhalt" className="flex flex-1 flex-col">
         {children}
       </main>
@@ -235,14 +250,12 @@ function AgeStep({
 
   return (
     <div className="flex flex-1 flex-col">
-      <div className="flex flex-col items-center justify-center gap-3 py-6 text-center">
-        <span className="text-6xl animate-wiggle" aria-hidden="true">
-          🎂
-        </span>
-        <h1 className="text-3xl font-extrabold">Wie alt bist du?</h1>
+      <div className="flex flex-col items-center justify-center gap-2 py-4 text-center">
+        <Mascot pose="winkt" className="h-28 w-28 animate-bob" />
+        <h1 className="font-display text-3xl font-bold">Wie alt bist du?</h1>
         <div className="flex items-center gap-2">
           <SpeakButton text="Wie alt bist du?" muted={muted} />
-          <p className="text-sm text-ink-soft">Mehr fragen wir nicht.</p>
+          <p className="text-sm font-semibold text-ink-soft">Mehr fragen wir nicht.</p>
         </div>
       </div>
 
@@ -252,7 +265,7 @@ function AgeStep({
             key={value}
             type="button"
             onClick={() => onPick(value)}
-            className="flex min-h-20 items-center justify-center rounded-2xl bg-white text-3xl font-extrabold shadow-md ring-1 ring-black/5 transition active:scale-95"
+            className="flex min-h-20 items-center justify-center rounded-chip bg-white font-display text-3xl font-bold shadow-[0_5px_0_rgb(42_30_70/0.14)] transition active:translate-y-[4px] active:shadow-[0_1px_0_rgb(42_30_70/0.14)]"
           >
             {value === 13 ? "12+" : value}
           </button>
@@ -281,14 +294,14 @@ function HighlightStep({
 
   return (
     <div className="flex flex-1 flex-col">
-      <div className="flex flex-col items-center justify-center gap-2 py-4 text-center">
-        <span className="text-5xl" aria-hidden="true">
-          ⭐
-        </span>
-        <h1 className="text-3xl font-extrabold">Was war am besten?</h1>
+      <div className="flex flex-col items-center justify-center gap-1.5 py-3 text-center">
+        <Pictogram name="stern" className="h-14 w-14 animate-wiggle" />
+        <h1 className="font-display text-3xl font-bold">Was war am besten?</h1>
         <div className="flex items-center gap-2">
           <SpeakButton text="Was war am besten?" muted={muted} />
-          <p className="text-sm text-ink-soft">Du kannst auch nichts auswählen.</p>
+          <p className="text-sm font-semibold text-ink-soft">
+            Du kannst auch nichts auswählen.
+          </p>
         </div>
       </div>
 
@@ -301,25 +314,21 @@ function HighlightStep({
               type="button"
               onClick={() => onToggle(item.key)}
               aria-pressed={active}
-              className={`flex min-h-24 flex-col items-center justify-center gap-1 rounded-2xl p-2 shadow-md transition active:scale-95 ${
-                active ? "bg-ink text-white" : "bg-white ring-1 ring-black/5"
+              className={`flex min-h-24 flex-col items-center justify-center gap-1 rounded-chip p-2 transition active:translate-y-[3px] ${
+                active
+                  ? "bg-ink text-white shadow-[0_4px_0_#170f28] ring-4 ring-yolk"
+                  : "bg-white shadow-[0_4px_0_rgb(42_30_70/0.14)]"
               }`}
             >
-              <span className="text-4xl" aria-hidden="true">
-                {item.emoji}
-              </span>
-              <span className="text-xs font-bold leading-tight">{item.label}</span>
+              <Art name={item.art} className="h-11 w-11" />
+              <span className="text-xs leading-tight font-bold">{item.label}</span>
             </button>
           );
         })}
       </div>
 
-      <button
-        type="button"
-        onClick={onDone}
-        className="tap mt-4 flex w-full items-center justify-center rounded-2xl bg-grass px-4 text-xl font-extrabold text-white shadow-lg"
-      >
-        Fertig! 🎉
+      <button type="button" onClick={onDone} className="btn btn-primary mt-auto mb-2 w-full text-xl">
+        Fertig!
       </button>
     </div>
   );

@@ -1,6 +1,10 @@
 "use client";
 
 import Link from "next/link";
+import { Art } from "@/components/art/Art";
+import { Glyph } from "@/components/art/Glyph";
+import { Mascot } from "@/components/art/Mascot";
+import { Pictogram } from "@/components/art/Pictogram";
 import { useEffect, useMemo, useState } from "react";
 import { FeatureBadges, HighlightBadges, Pill } from "@/components/Badges";
 import { ScoreSmileys } from "@/components/ScoreSmileys";
@@ -48,10 +52,8 @@ export default function PlaygroundDetailPage() {
   if (!id || !playground) {
     return (
       <main id="inhalt" className="mx-auto max-w-2xl space-y-4 px-4 py-10 text-center">
-        <span className="text-6xl" aria-hidden="true">
-          🧭
-        </span>
-        <h1 className="text-2xl font-extrabold">Spielplatz nicht gefunden</h1>
+        <Mascot pose="fragt" className="mx-auto h-32 w-32" />
+        <h1 className="text-2xl font-bold">Spielplatz nicht gefunden</h1>
         <p className="text-ink-soft">
           Der Link zeigt auf einen Platz, der nicht im Gerät gespeichert ist. Öffne ihn über
           die Liste.
@@ -82,7 +84,7 @@ export default function PlaygroundDetailPage() {
             className="tap flex items-center justify-center rounded-full bg-white px-4 text-xl shadow-sm ring-1 ring-black/5"
             aria-label="Zurück zur Liste"
           >
-            ←
+            <Glyph name="zurueck" className="h-6 w-6" />
           </Link>
           <p className="truncate font-bold">{playground.name}</p>
         </div>
@@ -91,7 +93,7 @@ export default function PlaygroundDetailPage() {
       <main id="inhalt" className="mx-auto max-w-2xl space-y-5 px-4 py-5">
         <section className="card space-y-3 p-4">
           <div>
-            <h1 className="text-2xl font-extrabold leading-tight">{playground.name}</h1>
+            <h1 className="text-2xl font-bold leading-tight">{playground.name}</h1>
             <p className="mt-1 text-sm text-ink-soft">
               {distance !== null
                 ? `${formatDistance(distance)} · ca. ${walkingMinutes(distance)} Min. zu Fuß`
@@ -109,7 +111,7 @@ export default function PlaygroundDetailPage() {
 
           <div className="flex flex-wrap gap-1.5">
             {shade ? (
-              <Pill emoji="🌳" tone="gruen">
+              <Pill art="baum" tone="gruen">
                 Schattig (laut Kindern)
               </Pill>
             ) : null}
@@ -120,14 +122,15 @@ export default function PlaygroundDetailPage() {
             href={mapsDirectionsUrl({ lat: playground.lat, lon: playground.lon })}
             target="_blank"
             rel="noreferrer"
-            className="tap flex w-full items-center justify-center gap-2 rounded-2xl bg-sky-soft px-4 text-lg font-bold"
+            className="btn w-full bg-sky-soft [--btn-edge:var(--color-sky-deep)]"
           >
-            🧭 Route in Google Maps
+            <Glyph name="route" filled className="h-6 w-6" />
+            Route in Google Maps
           </a>
         </section>
 
         <section className="card space-y-3 p-4">
-          <h2 className="text-lg font-extrabold">Für welches Alter ist der Platz gut?</h2>
+          <h2 className="text-lg font-bold">Für welches Alter ist der Platz gut?</h2>
           <p className="text-sm text-ink-soft">
             Tippe auf eine Altersgruppe, um die Punkte oben umzustellen.
           </p>
@@ -145,9 +148,7 @@ export default function PlaygroundDetailPage() {
                       active ? "bg-ink text-white" : "bg-sand-deep"
                     }`}
                   >
-                    <span className="text-2xl" aria-hidden="true">
-                      {meta.emoji}
-                    </span>
+                    <Art name={meta.art} className="h-8 w-8 shrink-0" />
                     <span className="flex-1">
                       <span className="block font-bold leading-tight">
                         {meta.label} ({meta.short})
@@ -160,7 +161,7 @@ export default function PlaygroundDetailPage() {
                           : `${aggregate.count} ${aggregate.count === 1 ? "Bewertung" : "Bewertungen"}`}
                       </span>
                     </span>
-                    <span className="text-xl font-extrabold tabular-nums">
+                    <span className="text-xl font-bold tabular-nums">
                       {aggregate.score === null ? "–" : formatScore(aggregate.score)}
                     </span>
                   </button>
@@ -173,7 +174,7 @@ export default function PlaygroundDetailPage() {
         {overall.count > 0 ? (
           <section className="card space-y-4 p-4">
             <div>
-              <h2 className="text-lg font-extrabold">Was die Kinder gesagt haben</h2>
+              <h2 className="text-lg font-bold">Was die Kinder gesagt haben</h2>
               <p className="text-sm text-ink-soft">
                 Häufigste Antwort (Median) aus {overall.count}{" "}
                 {overall.count === 1 ? "Bewertung" : "Bewertungen"}, alle Altersgruppen.
@@ -187,11 +188,13 @@ export default function PlaygroundDetailPage() {
                 return (
                   <li key={question.id} className="space-y-1.5">
                     <div className="flex items-baseline justify-between gap-2">
-                      <span className="text-sm font-bold">
-                        <span aria-hidden="true">{question.emoji}</span> {question.prompt}
+                      <span className="flex items-center gap-1.5 text-sm font-bold">
+                        <Art name={question.art} className="h-6 w-6 shrink-0" />
+                        {question.prompt}
                       </span>
-                      <span className="shrink-0 text-sm text-ink-soft">
-                        <span aria-hidden="true">{option.emoji}</span> {option.label}
+                      <span className="flex shrink-0 items-center gap-1.5 text-sm font-semibold text-ink-soft">
+                        <Art name={option.art} className="h-6 w-6" />
+                        {option.label}
                       </span>
                     </div>
                     <div className="flex gap-1" aria-hidden="true">
@@ -232,7 +235,7 @@ export default function PlaygroundDetailPage() {
           </section>
         ) : (
           <section className="card space-y-2 p-4">
-            <h2 className="text-lg font-extrabold">Noch keine Bewertung</h2>
+            <h2 className="text-lg font-bold">Noch keine Bewertung</h2>
             <p className="text-sm text-ink-soft">
               Diesen Platz hat noch kein Kind bewertet. Ihr könnt die Ersten sein — es dauert
               keine halbe Minute.
@@ -242,7 +245,7 @@ export default function PlaygroundDetailPage() {
 
         {playground.equipment.length > 0 ? (
           <section className="card space-y-2 p-4">
-            <h2 className="text-lg font-extrabold">Geräte laut OpenStreetMap</h2>
+            <h2 className="text-lg font-bold">Geräte laut OpenStreetMap</h2>
             <HighlightBadges
               highlights={playground.equipment.map((key) => ({ key, count: 0 }))}
             />
@@ -257,9 +260,10 @@ export default function PlaygroundDetailPage() {
         <div className="mx-auto max-w-2xl">
           <Link
             href={`/bewerten/?id=${encodeURIComponent(id)}`}
-            className="tap flex w-full items-center justify-center gap-2 rounded-2xl bg-grass px-4 text-xl font-extrabold text-white shadow-lg"
+            className="btn btn-primary w-full text-xl"
           >
-            🛝 Kind bewerten lassen
+            <Pictogram name="rutsche" className="h-7 w-7" />
+            Kind bewerten lassen
           </Link>
           <p className="mt-1.5 text-center text-xs text-ink-soft">
             5 Bildfragen · unter 30 Sekunden · ohne Namen

@@ -1,5 +1,6 @@
 "use client";
 
+import { Art } from "@/components/art/Art";
 import { AGE_GROUPS } from "@/lib/questions";
 import type { AgeGroupId } from "@/lib/types";
 
@@ -16,11 +17,7 @@ export function AgeGroupPicker({
   onChange: (id: AgeGroupId) => void;
 }) {
   return (
-    <div
-      className="flex gap-1.5"
-      role="group"
-      aria-label="Alter des Kindes wählen"
-    >
+    <div className="flex gap-2" role="group" aria-label="Alter des Kindes wählen">
       {AGE_GROUPS.map((group) => {
         const active = value === group.id;
         return (
@@ -29,19 +26,19 @@ export function AgeGroupPicker({
             type="button"
             onClick={() => onChange(group.id)}
             aria-pressed={active}
-            className={`tap flex min-w-0 flex-1 shrink flex-col items-center justify-center rounded-2xl px-2 py-1.5 transition ${
+            className={`tap flex min-w-0 flex-1 shrink flex-col items-center justify-center gap-0.5 rounded-chip px-1 py-2 transition ${
               active
-                ? "bg-ink text-white shadow-lg"
-                : "bg-white text-ink shadow-sm ring-1 ring-black/5"
+                ? "bg-ink text-white shadow-[0_4px_0_#170f28]"
+                : "bg-white shadow-[0_4px_0_rgb(42_30_70/0.14)] active:translate-y-[3px] active:shadow-[0_1px_0_rgb(42_30_70/0.14)]"
             }`}
           >
-            <span className="text-xl leading-none" aria-hidden="true">
-              {group.emoji}
+            <Art name={group.art} className="h-7 w-7" />
+            <span className="font-display text-sm leading-none font-bold">
+              {group.short}
             </span>
-            <span className="mt-1 text-sm font-bold leading-none">{group.short}</span>
             <span
-              className={`mt-0.5 truncate text-[10px] leading-none ${
-                active ? "text-white/70" : "text-ink-soft"
+              className={`truncate text-[10px] leading-none font-semibold ${
+                active ? "text-white/75" : "text-ink-soft"
               }`}
             >
               {group.label}

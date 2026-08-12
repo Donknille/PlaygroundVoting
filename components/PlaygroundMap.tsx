@@ -93,7 +93,7 @@ export default function PlaygroundMap({
 
         const icon = L.divIcon({
           className: "",
-          html: `<div style="display:flex;align-items:center;gap:4px;background:${tone};color:#fff;font-weight:800;font-size:13px;padding:5px 9px;border-radius:999px;box-shadow:0 2px 8px rgba(0,0,0,.3);white-space:nowrap">🛝 ${label}</div>`,
+          html: `<div style="display:flex;align-items:center;gap:4px;background:${tone};color:#fff;font-weight:800;font-size:13px;padding:5px 9px;border-radius:999px;box-shadow:0 2px 8px rgba(0,0,0,.3);white-space:nowrap"><svg width="14" height="14" viewBox="0 0 32 32"><circle cx="16" cy="16" r="14" fill="#fff"/><circle cx="11" cy="13.5" r="2.2" fill="#2a1e46"/><circle cx="21" cy="13.5" r="2.2" fill="#2a1e46"/><path d="M10.5 20c1.8 3.6 9.2 3.6 11 0" stroke="#2a1e46" stroke-width="2.6" fill="none" stroke-linecap="round"/></svg>${label}</div>`,
           iconSize: [66, 30],
           iconAnchor: [33, 30],
         });

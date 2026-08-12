@@ -1,6 +1,9 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { Art } from "@/components/art/Art";
+import { Glyph } from "@/components/art/Glyph";
+import { Mascot } from "@/components/art/Mascot";
 import { speak } from "@/lib/speech";
 
 /** Fortschritt als dicke Punkte – Kinder sehen, wie viel noch kommt, ohne zu lesen. */
@@ -21,8 +24,8 @@ export function KidProgressDots({ total, current }: { total: number; current: nu
             index < current
               ? "w-3 bg-grass"
               : index === current
-                ? "w-7 bg-ink"
-                : "w-3 bg-black/10"
+                ? "w-8 bg-ink"
+                : "w-3 bg-ink/15"
           }`}
         />
       ))}
@@ -36,10 +39,10 @@ export function SpeakButton({ text, muted }: { text: string; muted: boolean }) {
       type="button"
       onClick={() => speak(text)}
       disabled={muted}
-      className="tap flex items-center justify-center rounded-full bg-white px-4 text-2xl shadow-sm ring-1 ring-black/5 disabled:opacity-40"
+      className="btn btn-white tap aspect-square !rounded-full !px-0 disabled:opacity-40"
       aria-label="Frage vorlesen"
     >
-      🔊
+      <Glyph name={muted ? "stumm" : "lautsprecher"} className="h-7 w-7" />
     </button>
   );
 }
@@ -47,20 +50,21 @@ export function SpeakButton({ text, muted }: { text: string; muted: boolean }) {
 /**
  * Eine Frage, ein Bildschirm, drei gleich aussehende Antworten.
  *
- * Die drei Optionen sind bewusst farblich identisch: keine Antwort darf optisch
- * als die „richtige" erscheinen, sonst tippen Kinder das an, was gut aussieht.
+ * Die drei Karten sind bewusst farblich identisch: keine Antwort darf optisch
+ * als die „richtige" erscheinen, sonst tippen Kinder das an, was am schönsten
+ * aussieht. Unterschiedlich ist nur das Bild darauf.
  */
 export function KidQuestion({
   prompt,
-  emoji,
+  art,
   options,
   onAnswer,
   muted,
   speakOnMount,
 }: {
   prompt: string;
-  emoji: string;
-  options: { emoji: string; label: string }[];
+  art: string;
+  options: { art: string; label: string }[];
   onAnswer: (index: number) => void;
   muted: boolean;
   speakOnMount: string;
@@ -76,28 +80,31 @@ export function KidQuestion({
   }, [speakOnMount, muted]);
 
   return (
-    <div className="flex flex-1 flex-col">
-      <div className="flex flex-1 flex-col items-center justify-center gap-3 py-4 text-center">
-        <span className="text-6xl animate-wiggle" aria-hidden="true">
-          {emoji}
-        </span>
-        <h1 className="text-balance px-2 text-3xl font-extrabold leading-tight">
+    <div key={speakOnMount} className="flex flex-1 flex-col">
+      <div className="flex shrink-0 flex-col items-center justify-center gap-2 py-3 text-center">
+        <div className="flex items-end gap-1">
+          <Mascot pose="fragt" className="h-32 w-32 animate-bob" />
+          <span className="mb-4 rounded-blob rounded-bl-md bg-white px-3 py-2 shadow-md">
+            <Art name={art} className="h-14 w-14" />
+          </span>
+        </div>
+        <h1 className="animate-slide-up text-balance px-2 font-display text-4xl leading-tight font-bold">
           {prompt}
         </h1>
       </div>
 
-      <div className="grid grid-cols-3 gap-2 pb-2">
+      {/* Die Karten füllen die restliche Höhe: kein Leerraum, und die
+          Tippfläche wird so groß wie der Bildschirm es hergibt. */}
+      <div className="grid flex-1 grid-cols-3 gap-2 pb-2">
         {options.map((option, index) => (
           <button
             key={option.label}
             type="button"
             onClick={() => onAnswer(index)}
-            className="flex min-h-[30vh] flex-col items-center justify-center gap-3 rounded-blob bg-white p-2 shadow-md ring-1 ring-black/5 transition active:scale-95"
+            className="flex h-full min-h-[30vh] flex-col items-center justify-center gap-3 rounded-blob bg-white p-2 shadow-[0_5px_0_rgb(42_30_70/0.14)] transition active:translate-y-[4px] active:shadow-[0_1px_0_rgb(42_30_70/0.14)]"
           >
-            <span className="text-6xl" aria-hidden="true">
-              {option.emoji}
-            </span>
-            <span className="text-sm font-bold leading-tight text-ink-soft">
+            <Art name={option.art} className="h-24 w-24" />
+            <span className="text-base leading-tight font-bold text-ink-soft">
               {option.label}
             </span>
           </button>

@@ -1,26 +1,30 @@
+import { Art } from "@/components/art/Art";
 import { featureMeta, highlightMeta } from "@/lib/questions";
 import type { FeatureKey, HighlightKey } from "@/lib/types";
 
 export function Pill({
-  emoji,
+  art,
   children,
   tone = "neutral",
 }: {
-  emoji: string;
+  art: string;
   children: React.ReactNode;
-  tone?: "neutral" | "gruen" | "blau" | "lila";
+  tone?: "neutral" | "gruen" | "blau" | "lila" | "beere";
 }) {
   const tones = {
-    neutral: "bg-sand-deep text-ink",
-    gruen: "bg-grass-soft text-ink",
-    blau: "bg-sky-soft text-ink",
-    lila: "bg-plum-soft text-ink",
+    neutral: "bg-sand-deep",
+    gruen: "bg-grass-soft",
+    blau: "bg-sky-soft",
+    lila: "bg-plum-soft",
+    beere: "bg-berry-soft",
   } as const;
   return (
     <span
-      className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-medium ${tones[tone]}`}
+      className={`inline-flex items-center gap-1.5 rounded-full py-1 pr-3 pl-1.5 text-sm font-bold text-ink ${tones[tone]}`}
     >
-      <span aria-hidden="true">{emoji}</span>
+      <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white/70">
+        <Art name={art} className="h-4.5 w-4.5" />
+      </span>
       {children}
     </span>
   );
@@ -37,16 +41,16 @@ export function FeatureBadges({
   const shown = limit ? features.slice(0, limit) : features;
   if (shown.length === 0) return null;
   return (
-    <div className="flex flex-wrap gap-1.5">
+    <>
       {shown.map((key) => {
         const meta = featureMeta(key);
         return (
-          <Pill key={key} emoji={meta.emoji} tone="blau">
+          <Pill key={key} art={meta.art} tone="blau">
             {meta.label}
           </Pill>
         );
       })}
-    </div>
+    </>
   );
 }
 
@@ -61,16 +65,16 @@ export function HighlightBadges({
   const shown = limit ? highlights.slice(0, limit) : highlights;
   if (shown.length === 0) return null;
   return (
-    <div className="flex flex-wrap gap-1.5">
+    <>
       {shown.map(({ key, count }) => {
         const meta = highlightMeta(key);
         return (
-          <Pill key={key} emoji={meta.emoji} tone="lila">
+          <Pill key={key} art={meta.art} tone="lila">
             {meta.label}
-            <span className="text-ink-soft">×{count}</span>
+            {count > 0 ? <span className="text-ink-soft">×{count}</span> : null}
           </Pill>
         );
       })}
-    </div>
+    </>
   );
 }

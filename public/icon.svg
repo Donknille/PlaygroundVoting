@@ -1,12 +1,28 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Rutsche">
-  <rect width="512" height="512" rx="112" fill="#f59f0b" />
-  <path d="M0 392h512v8a112 112 0 0 1-112 112H112A112 112 0 0 1 0 400z" fill="#1f9d55" />
-  <rect x="152" y="128" width="212" height="46" rx="8" fill="#fff" transform="rotate(50.4 152 128)" />
-  <rect x="140" y="150" width="26" height="242" fill="#17233a" />
-  <g fill="#17233a">
-    <rect x="96" y="190" width="70" height="16" />
-    <rect x="96" y="242" width="70" height="16" />
-    <rect x="96" y="294" width="70" height="16" />
-    <rect x="96" y="346" width="70" height="16" />
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Spielplatz-Scouts">
+  <defs>
+    <linearGradient id="himmel" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#bcdcff"/>
+      <stop offset="100%" stop-color="#e6f2ff"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="512" height="512" rx="112" fill="url(#himmel)"/>
+  <circle cx="424" cy="96" r="44" fill="#ffc933"/>
+  <path d="M0 392c84-44 168-44 256 0s172 34 256 0v120H0z" fill="#16a95e"/>
+
+  <!-- Fips, das Maskottchen. Gleiche Zeichnung wie components/art/Mascot.tsx. -->
+  <g transform="translate(256 272) scale(4.3) translate(-60 -40)">
+    <path d="M41 32L33 6l23 13z" fill="#ff9500"/>
+    <path d="M42.5 28.5L37.5 13l13 7.5z" fill="#ffdcec"/>
+    <path d="M79 32L87 6 64 19z" fill="#ff9500"/>
+    <path d="M77.5 28.5L82.5 13l-13 7.5z" fill="#ffdcec"/>
+    <circle cx="60" cy="45" r="26" fill="#ff9500"/>
+    <ellipse cx="60" cy="54.5" rx="17.5" ry="13" fill="#fff3e2"/>
+    <ellipse cx="50.5" cy="41.5" rx="3.8" ry="4.4" fill="#2a1e46"/>
+    <ellipse cx="69.5" cy="41.5" rx="3.8" ry="4.4" fill="#2a1e46"/>
+    <circle cx="51.8" cy="39.8" r="1.4" fill="#fff"/>
+    <circle cx="70.8" cy="39.8" r="1.4" fill="#fff"/>
+    <path d="M60 48.5c3.4 0 5.4 1.9 5.4 3.9 0 2.1-2.5 3.6-5.4 3.6s-5.4-1.5-5.4-3.6c0-2 2-3.9 5.4-3.9z" fill="#2a1e46"/>
+    <path d="M60 56v2.4M60 58.4c-2.2 2.8-6 2.2-7 .2M60 58.4c2.2 2.8 6 2.2 7 .2" stroke="#2a1e46" stroke-width="2.2" stroke-linecap="round" fill="none"/>
   </g>
 </svg>

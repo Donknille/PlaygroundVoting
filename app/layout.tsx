@@ -1,4 +1,9 @@
 import type { Metadata, Viewport } from "next";
+// Selbst gehostet statt über Google Fonts geladen: keine externe Anfrage zur
+// Laufzeit, funktioniert offline und greift auch auf Android, wo die runde
+// Systemschrift ui-rounded fehlt.
+import "@fontsource-variable/fredoka/wght.css";
+import "@fontsource-variable/nunito/wght.css";
 import "./globals.css";
 import { ServiceWorker } from "@/components/ServiceWorker";
 
@@ -16,7 +21,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#f59f0b",
+  themeColor: "#ff9500",
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",

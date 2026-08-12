@@ -4,7 +4,7 @@
  * eine Bewertung entgegennehmen können (die liegt ohnehin nur im Gerät).
  */
 
-const CACHE = "scouts-v1";
+const CACHE = "scouts-v2";
 
 const APP_SHELL = [
   "/",

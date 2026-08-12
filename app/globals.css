@@ -1,27 +1,64 @@
 @import "tailwindcss";
 
 @theme {
-  /* Farbwelt: warm, hell, hoher Kontrast – funktioniert bei Sonnenlicht auf dem Spielplatz */
-  --color-ink: #17233a;
-  --color-ink-soft: #566384;
-  --color-sand: #fff8ec;
-  --color-sand-deep: #ffeed6;
+  /* ---------------------------------------------------------------
+     Farbwelt: kräftig, warm, hoher Kontrast.
+     Gebaut für ein Handy in der Sonne — keine Pastelltöne, keine
+     Grauabstufungen, die draußen verschwinden.
+     Jede Farbe hat drei Rollen:
+       -soft  Fläche hinter dunklem Text
+       (pur)  Illustration und Icon
+       -deep  Knopfhintergrund mit weißem Text (Kontrast geprüft)
+     --------------------------------------------------------------- */
+  --color-ink: #2a1e46;
+  --color-ink-soft: #6b6188;
+  --color-sand: #fff4e2;
+  --color-sand-deep: #ffe3bb;
   --color-card: #ffffff;
-  --color-sun: #f59f0b;
-  --color-sun-soft: #fff2d6;
-  --color-grass: #1f9d55;
-  --color-grass-soft: #e3f7ea;
-  --color-sky: #2570d4;
-  --color-sky-soft: #e2eeff;
-  --color-coral: #e64a35;
-  --color-coral-soft: #ffe8e3;
-  --color-plum: #6b4ee6;
-  --color-plum-soft: #eee9ff;
 
-  --radius-blob: 1.75rem;
+  --color-sun: #ff9500;
+  --color-sun-deep: #b35f00;
+  --color-sun-soft: #ffe8c7;
 
-  --font-sans: ui-rounded, "SF Pro Rounded", "Nunito", system-ui, -apple-system,
-    "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  --color-yolk: #ffc933;
+  --color-yolk-soft: #fff3cc;
+
+  --color-grass: #16a95e;
+  --color-grass-deep: #0b7a43;
+  --color-grass-soft: #d4f5e3;
+
+  --color-sky: #2f86ff;
+  --color-sky-deep: #1a5fc4;
+  --color-sky-soft: #d8e8ff;
+
+  --color-coral: #ff5245;
+  --color-coral-deep: #c0362b;
+  --color-coral-soft: #ffdfdc;
+
+  --color-plum: #7c4dff;
+  --color-plum-deep: #5a2fd0;
+  --color-plum-soft: #e8e0ff;
+
+  --color-berry: #ff4f96;
+  --color-berry-deep: #c9256a;
+  --color-berry-soft: #ffdcec;
+
+  --color-mint: #0fbfa4;
+  --color-mint-deep: #0a8271;
+  --color-mint-soft: #d1f6f0;
+
+  --color-bark: #8b5e3c;
+  --color-bark-soft: #f0dfd1;
+
+  --radius-blob: 2rem;
+  --radius-chip: 1.25rem;
+
+  /* Fredoka für alles Laute, Nunito für alles Lesbare. Beide selbst gehostet
+     (siehe app/layout.tsx) — sie greifen deshalb auch auf Android, wo es
+     ui-rounded nicht gibt. */
+  --font-display: "Fredoka Variable", ui-rounded, "SF Pro Rounded", system-ui, sans-serif;
+  --font-sans: "Nunito Variable", ui-rounded, system-ui, -apple-system, "Segoe UI",
+    Roboto, "Helvetica Neue", sans-serif;
 }
 
 html {
@@ -33,7 +70,17 @@ body {
   background: var(--color-sand);
   color: var(--color-ink);
   font-family: var(--font-sans);
+  font-weight: 500;
   overscroll-behavior-y: none;
+}
+
+h1,
+h2,
+h3,
+.font-display {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.01em;
 }
 
 /* Mindest-Touchziel 56px – Kinderfinger und Elternhände mit Kind auf dem Arm */
@@ -45,7 +92,68 @@ body {
 @utility card {
   background: var(--color-card);
   border-radius: var(--radius-blob);
-  box-shadow: 0 1px 2px rgb(23 35 58 / 0.06), 0 8px 24px -12px rgb(23 35 58 / 0.18);
+  box-shadow:
+    0 2px 0 rgb(42 30 70 / 0.05),
+    0 12px 26px -16px rgb(42 30 70 / 0.4);
+}
+
+/* Aufkleber-Optik: weißer Rand ringsum, wie ein aufgeklebter Sticker. */
+@utility sticker {
+  box-shadow:
+    0 0 0 4px var(--color-card),
+    0 8px 18px -10px rgb(42 30 70 / 0.55);
+}
+
+/* ---------------------------------------------------------------
+   Knöpfe mit dicker Unterkante, die beim Drücken einfedert.
+   Das ist die auffälligste Geste des neuen Designs: Knöpfe fühlen
+   sich an wie Spielzeugtasten statt wie Formularfelder.
+   --------------------------------------------------------------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 3.5rem;
+  padding-inline: 1.25rem;
+  border-radius: var(--radius-chip);
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.125rem;
+  line-height: 1.15;
+  box-shadow: 0 4px 0 var(--btn-edge, rgb(42 30 70 / 0.15));
+  transition:
+    transform 90ms ease,
+    box-shadow 90ms ease;
+}
+
+.btn:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 var(--btn-edge, rgb(42 30 70 / 0.15));
+}
+
+.btn-primary {
+  background: var(--color-grass-deep);
+  color: #fff;
+  --btn-edge: #064c2a;
+}
+
+.btn-sun {
+  background: var(--color-sun);
+  color: var(--color-ink);
+  --btn-edge: #c96f00;
+}
+
+.btn-ink {
+  background: var(--color-ink);
+  color: #fff;
+  --btn-edge: #170f28;
+}
+
+.btn-white {
+  background: var(--color-card);
+  color: var(--color-ink);
+  --btn-edge: rgb(42 30 70 / 0.16);
 }
 
 /* Sichtbarer Fokus – wird für Tastatur und Screenreader gebraucht */
@@ -90,12 +198,61 @@ body {
   }
 }
 
+/* Maskottchen schwebt leicht — lebendig, ohne abzulenken. */
+@keyframes bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes tada {
+  0% {
+    transform: scale(1) rotate(0deg);
+  }
+  30% {
+    transform: scale(1.12) rotate(-6deg);
+  }
+  60% {
+    transform: scale(1.06) rotate(5deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+@keyframes slide-up {
+  0% {
+    transform: translateY(14px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
 .animate-pop-in {
   animation: pop-in 260ms cubic-bezier(0.2, 0.9, 0.3, 1.2) both;
 }
 
 .animate-wiggle {
   animation: wiggle 1.4s ease-in-out infinite;
+}
+
+.animate-bob {
+  animation: bob 3s ease-in-out infinite;
+}
+
+.animate-tada {
+  animation: tada 900ms ease-in-out both;
+}
+
+.animate-slide-up {
+  animation: slide-up 320ms cubic-bezier(0.2, 0.9, 0.3, 1.1) both;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -112,6 +269,6 @@ body {
 .leaflet-container {
   height: 100%;
   width: 100%;
-  background: #dfe6ea;
+  background: #cfe3d6;
   font-family: var(--font-sans);
 }

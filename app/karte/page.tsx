@@ -2,6 +2,7 @@
 
 import dynamic from "next/dynamic";
 import Link from "next/link";
+import { Glyph } from "@/components/art/Glyph";
 import { useEffect, useState } from "react";
 import { AgeGroupPicker } from "@/components/AgeGroupPicker";
 import { ScoreSmileys } from "@/components/ScoreSmileys";
@@ -46,7 +47,7 @@ export default function MapPage() {
             className="tap flex items-center justify-center rounded-full bg-white px-4 text-xl shadow-sm ring-1 ring-black/5"
             aria-label="Zurück zur Liste"
           >
-            ←
+            <Glyph name="zurueck" className="h-6 w-6" />
           </Link>
           <p className="flex-1 font-bold">Karte</p>
           {world.mode === "demo" ? (
@@ -91,7 +92,7 @@ export default function MapPage() {
                   className="tap flex items-center justify-center rounded-full bg-sand-deep px-4 text-lg"
                   aria-label="Schließen"
                 >
-                  ✕
+                  <Glyph name="schliessen" className="h-5 w-5" />
                 </button>
               </div>
 
