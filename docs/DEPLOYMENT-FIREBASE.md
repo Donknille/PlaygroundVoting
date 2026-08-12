@@ -70,19 +70,55 @@ pwd        # Windows PowerShell: pwd funktioniert ebenfalls
 
 Die Ausgabe muss auf `PlaygroundVoting` enden, etwa `/Users/du/PlaygroundVoting`.
 
-### Alternative: Google Cloud Shell (ohne lokale Installation)
+### Empfohlen ohne Installation: Google Cloud Shell
 
-Willst du nichts auf deinem Rechner installieren, gibt es ein Terminal im Browser, das bereits
-mit deinem Google-Konto angemeldet ist und Node.js sowie `firebase-tools` mitbringt.
+Wenn `git` oder `npm` mit „wurde nicht als Name eines Cmdlet … erkannt" bzw.
+„command not found" antworten, fehlen die Programme auf deinem Rechner. Auf Firmenrechnern
+darfst du sie oft nicht nachinstallieren.
 
-1. **https://console.cloud.google.com** öffnen (die *Cloud*-Konsole, nicht die Firebase-Konsole)
-2. Oben rechts auf das Symbol **`>_`** („Cloud Shell aktivieren")
-3. Unten öffnet sich ein Terminal — dort laufen alle Befehle dieser Anleitung
+Dafür gibt es **Google Cloud Shell**: ein Terminal im Browser, in dem git, Node.js und die
+Firebase-Befehle bereits fertig eingerichtet sind und das mit deinem Google-Konto angemeldet ist.
+Da dieses Repository öffentlich ist und der Arbeitsbranch zugleich der Standard-Branch, genügt
+ein Link — der Code wird beim Öffnen automatisch geklont:
 
-Was dabei entfällt: Teil 2.4 (Installation) und Teil 3.1 (`firebase login`).
+```
+https://shell.cloud.google.com/cloudshell/editor?cloudshell_git_repo=https://github.com/Donknille/PlaygroundVoting
+```
 
-Was du in Kauf nimmst: Die Sitzung endet nach etwa einer Stunde Untätigkeit, und du kannst die
-App nicht lokal im Browser ansehen. Für einen reinen Deploy reicht es.
+Beim ersten Aufruf bestätigst du nacheinander die Nutzungsbedingungen, die Rückfrage zum Klonen
+(*„Trust this repository?"*) und wartest etwa 30 Sekunden auf die Bereitstellung.
+
+Damit entfallen **Teil 2.1** (`git clone`) und **Teil 2.4** (Installation der Firebase-Befehle)
+vollständig. Weiter geht es direkt mit:
+
+```bash
+cd PlaygroundVoting
+node -v                  # erwartet: v20 oder höher
+firebase --version       # erwartet: 13 oder höher
+```
+
+In Teil 3.1 nimmst du die Variante `firebase login --no-localhost`, weil Cloud Shell keinen
+eigenen Browser öffnen kann.
+
+Was du in Kauf nimmst: Die Sitzung endet nach etwa einer Stunde Untätigkeit (die Dateien im
+Heimatverzeichnis bleiben erhalten), und du kannst die App nicht unter `localhost` im eigenen
+Browser ansehen. Für Bauen und Veröffentlichen reicht es vollständig.
+
+### Wenn du es doch lokal einrichten willst (Windows)
+
+Zwei Installationen, jeweils mit Administratorrechten:
+
+- **Git für Windows** — https://git-scm.com/download/win (alle Vorgaben des Installers übernehmen)
+- **Node.js LTS** — https://nodejs.org
+
+Danach PowerShell **schließen und neu öffnen**, sonst sind die neuen Befehle dort noch unbekannt.
+
+⚠️ Arbeite nicht auf einem Netzlaufwerk wie `H:\`. `npm install` legt zehntausende kleine Dateien
+an und wird über das Netz extrem langsam oder bricht ab. Wechsle vorher auf ein lokales Laufwerk:
+
+```powershell
+cd C:\Users\$env:USERNAME\Documents
+```
 
 ---
 
@@ -139,18 +175,22 @@ Damit ist der Browser-Teil erledigt. Alles Weitere passiert im Terminal.
 
 ### 2.1 Den Code holen
 
+*Nutzt du Cloud Shell, ist dieser Schritt bereits erledigt — weiter bei 2.2.*
+
 ```bash
 git clone https://github.com/Donknille/PlaygroundVoting.git
 cd PlaygroundVoting
-git checkout claude/playground-rating-app-a3q9kf
 ```
+
+Ein `git checkout` ist nicht nötig: `claude/playground-rating-app-a3q9kf` ist der Standard-Branch
+des Repositories, du landest also direkt darauf. Das Repository ist öffentlich, es wird keine
+Anmeldung verlangt.
 
 Hast du den Ordner schon, reicht:
 
 ```bash
 cd PlaygroundVoting
-git checkout claude/playground-rating-app-a3q9kf
-git pull origin claude/playground-rating-app-a3q9kf
+git pull
 ```
 
 ### 2.2 Abhängigkeiten installieren
