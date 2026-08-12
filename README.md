@@ -89,6 +89,19 @@ npm run typecheck
 Stack: Next.js 16 (App Router, `output: "export"`), TypeScript, Tailwind CSS v4, Leaflet.
 Kein Server, keine Datenbank, keine laufenden Kosten.
 
+## Bildzeichen
+
+Die Bildzeichen stammen aus **Fluent Emoji** (Microsoft, MIT-Lizenz) und liegen als SVG im
+Bundle — zur Laufzeit wird nichts nachgeladen, und sie sehen auf jedem Gerät gleich aus.
+Eigene Zeichnungen gibt es nur für Schaukel, Wippe, Zaun und Trampolin (dafür existiert kein
+Emoji) sowie für die gefüllten Uhren, die als Mengenskala entworfen sind.
+
+Satz neu erzeugen nach einer Änderung der Zuordnung:
+
+```bash
+node scripts/emoji-generieren.mjs
+```
+
 ## Deployment auf Google Cloud
 
 ### Variante A — Firebase Hosting (empfohlen, Spark-Tarif = 0 €, keine Kreditkarte)

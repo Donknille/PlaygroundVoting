@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Pictogram } from "@/components/art/Pictogram";
+import { Icon } from "@/components/art/Icon";
 
 /**
  * Demo-Daten müssen immer als solche erkennbar sein. Generierte Beispielstimmen
@@ -8,7 +8,7 @@ import { Pictogram } from "@/components/art/Pictogram";
 export function DemoBanner({ reason }: { reason?: string | null }) {
   return (
     <div className="flex items-start gap-2.5 rounded-chip border-[3px] border-dashed border-sun bg-sun-soft px-3 py-2.5 text-sm">
-      <Pictogram name="kolben" className="mt-0.5 h-7 w-7 shrink-0" />
+      <Icon name="kolben" className="mt-0.5 h-7 w-7 shrink-0" />
       <p>
         <span className="font-display font-bold">Demo-Modus — erfundene Spielplätze.</span>{" "}
         <span className="font-semibold text-ink-soft">

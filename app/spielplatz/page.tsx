@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Art } from "@/components/art/Art";
 import { Glyph } from "@/components/art/Glyph";
 import { Mascot } from "@/components/art/Mascot";
-import { Pictogram } from "@/components/art/Pictogram";
+import { Icon } from "@/components/art/Icon";
 import { useEffect, useMemo, useState } from "react";
 import { FeatureBadges, HighlightBadges, Pill } from "@/components/Badges";
 import { VerdictLine } from "@/components/Verdict";
@@ -263,7 +263,7 @@ export default function PlaygroundDetailPage() {
             href={`/bewerten/?id=${encodeURIComponent(id)}`}
             className="btn btn-primary w-full text-xl"
           >
-            <Pictogram name="rutsche" className="h-7 w-7" />
+            <Icon name="rutsche" className="h-7 w-7" />
             Kind bewerten lassen
           </Link>
           <p className="mt-1.5 text-center text-xs text-ink-soft">

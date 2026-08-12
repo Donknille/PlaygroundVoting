@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Art } from "@/components/art/Art";
-import { Pictogram } from "@/components/art/Pictogram";
+import { Icon } from "@/components/art/Icon";
 import { AppHeader } from "@/components/AppHeader";
 import { MIN_RATINGS_FOR_SCORE } from "@/lib/config";
 import {
@@ -210,7 +210,7 @@ export default function ScalePage() {
 
         <section id="demo" className="card space-y-3 border-2 border-dashed border-sun p-4">
           <h2 className="flex items-center gap-2 text-xl font-bold">
-            <Pictogram name="kolben" className="h-7 w-7" /> Über den Demo-Modus
+            <Icon name="kolben" className="h-7 w-7" /> Über den Demo-Modus
           </h2>
           <p className="font-semibold text-ink-soft">
             Wenn keine Verbindung zu OpenStreetMap besteht oder du den Demo-Modus selbst

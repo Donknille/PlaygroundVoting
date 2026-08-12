@@ -5,7 +5,7 @@ import { useCallback, useEffect, useState } from "react";
 import { AppHeader } from "@/components/AppHeader";
 import { Art } from "@/components/art/Art";
 import { Mascot } from "@/components/art/Mascot";
-import { Pictogram } from "@/components/art/Pictogram";
+import { Icon } from "@/components/art/Icon";
 import {
   badgeStates,
   clearProfile,
@@ -176,8 +176,8 @@ function AbzeichenKachel({ abzeichen }: { abzeichen: BadgeState }) {
         abzeichen.erreicht ? "bg-paper shadow-[0_3px_0_rgb(46_42_36/0.12)]" : "bg-line"
       }`}
     >
-      <Pictogram
-        name={abzeichen.art as never}
+      <Icon
+        name={abzeichen.art}
         className={`h-10 w-10 ${abzeichen.erreicht ? "" : "opacity-25 grayscale"}`}
       />
       <span

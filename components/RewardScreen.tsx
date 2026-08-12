@@ -3,10 +3,10 @@
 import Link from "next/link";
 import { useMemo } from "react";
 import { Mascot } from "@/components/art/Mascot";
-import { Pictogram, type PictogramName } from "@/components/art/Pictogram";
+import { Icon } from "@/components/art/Icon";
 
 /** Sammelbare Belohnungen — bewusst Spielgeräte, nicht abstrakte Sterne. */
-const STICKERS: PictogramName[] = [
+const STICKERS: string[] = [
   "medaille",
   "stern",
   "rutsche",
@@ -69,7 +69,7 @@ export function RewardScreen({
       <Mascot pose="jubelt" className="relative h-40 w-40 animate-tada" />
 
       <div className="relative flex h-28 w-28 items-center justify-center rounded-full bg-paper sticker animate-pop-in">
-        <Pictogram name={sticker} className="h-20 w-20" />
+        <Icon name={sticker} className="h-20 w-20" />
       </div>
 
       <div className="relative space-y-1.5 px-4">

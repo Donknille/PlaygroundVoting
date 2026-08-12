@@ -158,8 +158,11 @@ drei Kinder-Gruppen · drei gefüllte Uhren
 Standort · Karte · Liste · Lautsprecher · Stumm · Haken · Zurück · Weiter · Route · Papierkorb ·
 Aktualisieren · Info · Schließen
 
-**Wichtige Regel:** Keine Emojis. Ein Emoji sieht auf iOS, Android und Windows unterschiedlich
-aus — die Antwortbilder im Kinder-Modus wären damit auf jedem Gerät andere Bilder.
+**Überholt:** Die Bildzeichen kommen inzwischen aus **Fluent Emoji** (Microsoft, MIT) und liegen
+als SVG im Bundle. Der ursprüngliche Einwand gegen Emoji war die Geräteabhängigkeit — die
+entfällt, weil nichts vom System übernommen wird. Eigene Zeichnungen bleiben nur für Schaukel,
+Wippe, Zaun und Trampolin, für die es kein Emoji gibt, sowie für die gefüllten Uhren als
+Mengenskala. Erzeugt wird der Satz von `scripts/emoji-generieren.mjs`.
 
 **Die drei Gesichter** sind der wichtigste Baustein und kommen aus einer einzigen Quelle,
 weil sie an zwei Stellen dasselbe bedeuten müssen:
