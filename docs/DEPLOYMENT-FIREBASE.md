@@ -37,6 +37,55 @@ installiere zuerst Node.js LTS von nodejs.org und öffne das Terminal danach neu
 
 ---
 
+## Teil 0.5 — Wo gebe ich die Befehle eigentlich ein?
+
+**In das Terminal deines eigenen Computers.** Nicht in die Firebase-Konsole, nicht in einen Chat.
+
+Das ist die häufigste Verwirrung, und die Firebase-Konsole ist selbst schuld daran: Klickst du
+dort auf **Hosting → „Jetzt starten"**, zeigt sie dieselben Befehle mit einem Kopier-Knopf an.
+Sie *zeigt* sie nur — ausgeführt werden sie bei dir lokal. Ein Terminal gibt es in der
+Firebase-Konsole nicht.
+
+### Terminal öffnen
+
+| System | Weg |
+|---|---|
+| **macOS** | `Cmd` + `Leertaste` → `Terminal` tippen → Enter |
+| **Windows** | Startmenü → `PowerShell` tippen → „Windows PowerShell" öffnen |
+| **Linux** | Meist `Strg` + `Alt` + `T` |
+
+Es erscheint ein Fenster mit einer Eingabezeile. Befehle tippst du einzeln ein und bestätigst
+jeden mit Enter. Warte immer ab, bis ein Befehl fertig ist, bevor du den nächsten eingibst.
+
+### Im richtigen Ordner stehen
+
+Ab Teil 2 müssen die Befehle **im Projektordner** ausgeführt werden, sonst findet `npm` die
+Datei `package.json` nicht. Nach dem `git clone` bringt dich `cd PlaygroundVoting` dorthin.
+
+Kontrolle, wo du gerade bist:
+
+```bash
+pwd        # Windows PowerShell: pwd funktioniert ebenfalls
+```
+
+Die Ausgabe muss auf `PlaygroundVoting` enden, etwa `/Users/du/PlaygroundVoting`.
+
+### Alternative: Google Cloud Shell (ohne lokale Installation)
+
+Willst du nichts auf deinem Rechner installieren, gibt es ein Terminal im Browser, das bereits
+mit deinem Google-Konto angemeldet ist und Node.js sowie `firebase-tools` mitbringt.
+
+1. **https://console.cloud.google.com** öffnen (die *Cloud*-Konsole, nicht die Firebase-Konsole)
+2. Oben rechts auf das Symbol **`>_`** („Cloud Shell aktivieren")
+3. Unten öffnet sich ein Terminal — dort laufen alle Befehle dieser Anleitung
+
+Was dabei entfällt: Teil 2.4 (Installation) und Teil 3.1 (`firebase login`).
+
+Was du in Kauf nimmst: Die Sitzung endet nach etwa einer Stunde Untätigkeit, und du kannst die
+App nicht lokal im Browser ansehen. Für einen reinen Deploy reicht es.
+
+---
+
 ## Teil 1 — Das Firebase-Projekt anlegen (im Browser)
 
 ### 1.1 Firebase-Konsole öffnen
