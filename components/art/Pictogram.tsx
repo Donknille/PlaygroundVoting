@@ -39,10 +39,10 @@ export type PictogramName =
   | "uhr-kurz"
   | "uhr-mittel"
   | "uhr-lang"
-  // Antwortbilder: Toben
-  | "stehen"
-  | "huepfen"
-  | "superheld"
+  // Antwortbilder: Toben — eine Steigerung, kein Rollenspiel
+  | "toben-wenig"
+  | "toben-mittel"
+  | "toben-viel"
   // Antwortbilder: Kinder
   | "kind-eins"
   | "kind-paar"
@@ -431,40 +431,103 @@ const ART: Record<PictogramName, React.ReactNode> = {
     </>
   ),
 
-  stehen: (
+  /* Dieselbe Figur in drei Stufen: stehen, hüpfen, an der Stange hängen.
+     Vorher waren es Strichmännchen — sie brachen mit der flachen Formensprache
+     der übrigen Zeichen, und die Umhang-Figur war nicht als solche erkennbar. */
+  "toben-wenig": (
     <>
-      <circle cx="16" cy="7.5" r="4.2" fill="var(--color-sun)" />
+      <circle cx="16" cy="7.5" r="4.6" fill="var(--color-yolk)" />
+      <rect x="11.8" y="12.2" width="8.4" height="8.6" rx="4.2" fill="var(--color-plum)" />
+      <rect x="8.4" y="12.6" width="3.6" height="7.8" rx="1.8" fill="var(--color-plum)" />
+      <rect x="20" y="12.6" width="3.6" height="7.8" rx="1.8" fill="var(--color-plum)" />
+      <rect x="12.4" y="19.6" width="3.2" height="7.8" rx="1.6" fill="var(--color-plum-deep)" />
+      <rect x="16.4" y="19.6" width="3.2" height="7.8" rx="1.6" fill="var(--color-plum-deep)" />
+      {GROUND}
+    </>
+  ),
+
+  "toben-mittel": (
+    <>
+      <circle cx="16" cy="6.4" r="4.6" fill="var(--color-yolk)" />
+      <rect x="11.8" y="11.3" width="8.4" height="9.4" rx="4.2" fill="var(--color-plum)" />
+      <rect
+        x="6.8"
+        y="8.6"
+        width="3.6"
+        height="8.4"
+        rx="1.8"
+        fill="var(--color-plum)"
+        transform="rotate(-38 8.6 12.8)"
+      />
+      <rect
+        x="21.6"
+        y="8.6"
+        width="3.6"
+        height="8.4"
+        rx="1.8"
+        fill="var(--color-plum)"
+        transform="rotate(38 23.4 12.8)"
+      />
+      <rect
+        x="11.2"
+        y="19.6"
+        width="3.2"
+        height="6"
+        rx="1.6"
+        fill="var(--color-plum-deep)"
+        transform="rotate(-28 12.8 22.6)"
+      />
+      <rect
+        x="17.6"
+        y="19.6"
+        width="3.2"
+        height="6"
+        rx="1.6"
+        fill="var(--color-plum-deep)"
+        transform="rotate(28 19.2 22.6)"
+      />
+      {/* Sprunglinien: die Figur ist vom Boden weg */}
       <path
-        d="M16 12v9M16 21l-3.5 6.5M16 21l3.5 6.5M11 16.5h10"
-        stroke="var(--color-plum)"
-        strokeWidth="2.8"
+        d="M8 27c1.6 1.1 3.2 1.6 4.8 1.8M24 27c-1.6 1.1-3.2 1.6-4.8 1.8"
+        stroke="var(--color-ink-fainter)"
+        strokeWidth="1.8"
         strokeLinecap="round"
+        fill="none"
       />
     </>
   ),
 
-  huepfen: (
+  "toben-viel": (
     <>
-      <circle cx="16" cy="9" r="4.2" fill="var(--color-sun)" />
-      <path
-        d="M16 13.5v6.5M16 20l-4.5 5.5M16 20l4.5 5.5M16 15.5l-5.5-4.5M16 15.5l5.5-4.5"
-        stroke="var(--color-plum)"
-        strokeWidth="2.8"
-        strokeLinecap="round"
+      {/* Kletterstange */}
+      <rect x="2.5" y="3.5" width="27" height="3.2" rx="1.6" fill="var(--color-bark)" />
+      {/* Arme greifen nach oben */}
+      <rect x="11.4" y="6" width="3.4" height="8" rx="1.7" fill="var(--color-plum)" />
+      <rect x="17.2" y="6" width="3.4" height="8" rx="1.7" fill="var(--color-plum)" />
+      <circle cx="16" cy="15.2" r="4.4" fill="var(--color-yolk)" />
+      <rect x="11.9" y="18.6" width="8.2" height="7.6" rx="4.1" fill="var(--color-plum)" />
+      {/* Beine schwingen */}
+      <rect
+        x="11"
+        y="24.6"
+        width="3.2"
+        height="5.8"
+        rx="1.6"
+        fill="var(--color-plum-deep)"
+        transform="rotate(-34 12.6 27.5)"
       />
-    </>
-  ),
-
-  superheld: (
-    <>
-      <path d="M18.5 9.5c6 2 7.5 9 5 14l-9-7z" fill="var(--color-coral)" />
-      <circle cx="11.5" cy="9" r="4.2" fill="var(--color-sun)" />
-      <path
-        d="M11.5 13.5l5.5 4M11.5 13.5L8 22M17 17.5l2.5 6.5M11.5 13.5L5 10"
-        stroke="var(--color-plum)"
-        strokeWidth="2.8"
-        strokeLinecap="round"
+      <rect
+        x="17.8"
+        y="24.6"
+        width="3.2"
+        height="5.8"
+        rx="1.6"
+        fill="var(--color-plum-deep)"
+        transform="rotate(34 19.4 27.5)"
       />
+      {/* Funken: hier geht am meisten */}
+      <path d="M4 13.5l1 2.2 2.2 1-2.2 1L4 20l-1-2.3-2.2-1 2.2-1z" fill="var(--color-sun)" />
+      <path d="M28 12l.9 2 2 .9-2 .9-.9 2-.9-2-2-.9 2-.9z" fill="var(--color-sun)" />
     </>
   ),
 

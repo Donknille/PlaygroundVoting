@@ -69,9 +69,9 @@ export const QUESTIONS: Question[] = [
     explain:
       "Bewegungsangebot. Erklärt, warum ein Platz für die eine Altersgruppe super und für die andere langweilig ist.",
     options: [
-      { art: "stehen", label: "Nicht wirklich" },
-      { art: "huepfen", label: "Ein bisschen" },
-      { art: "superheld", label: "Super!" },
+      { art: "toben-wenig", label: "Nicht wirklich" },
+      { art: "toben-mittel", label: "Ein bisschen" },
+      { art: "toben-viel", label: "Super!" },
     ],
   },
   {
