@@ -228,7 +228,7 @@ export default function KidMode() {
         kopf={<KidKopf schritt={2} muted={muted} onMute={() => setMuted((m) => !m)} />}
         onSprechen={() => ansage(KERNFRAGE.prompt)}
       >
-        <Frage text={KERNFRAGE.prompt} />
+        <Frage text={KERNFRAGE.prompt} art={KERNFRAGE.art} />
         <Antworten
           optionen={KERNFRAGE.options}
           onWahl={(i) => {
@@ -248,7 +248,7 @@ export default function KidMode() {
         kopf={<KidKopf schritt={3} muted={muted} onMute={() => setMuted((m) => !m)} />}
         onSprechen={() => ansage("Was war am besten?")}
       >
-        <Frage text="Was war am besten?" klein="Du kannst auch nichts auswählen." />
+        <Frage text="Was war am besten?" klein="Du kannst auch nichts auswählen." art="stern" />
         <div className="grid flex-1 grid-cols-3 content-start gap-2">
           {HIGHLIGHTS.map((item) => {
             const aktiv = highlights.includes(item.key);
@@ -335,7 +335,7 @@ export default function KidMode() {
       }
       onSprechen={() => ansage(frage.prompt)}
     >
-      <Frage text={frage.prompt} />
+      <Frage text={frage.prompt} art={frage.art} />
       <Antworten
         optionen={frage.options}
         onWahl={(i) => {
@@ -434,13 +434,20 @@ function KidKopf({
   );
 }
 
-function Frage({ text, klein }: { text: string; klein?: string }) {
+function Frage({ text, klein, art }: { text: string; klein?: string; art?: string }) {
   return (
-    <div className="px-1 pt-1 pb-4">
-      <h1 className="animate-slide-up font-display text-4xl leading-tight font-bold text-balance text-paper">
-        {text}
-      </h1>
-      {klein ? <p className="mt-1.5 text-base text-paper/75">{klein}</p> : null}
+    <div className="flex items-start gap-3 px-1 pt-1 pb-3">
+      {art ? (
+        <span className="mt-1 flex h-14 w-14 shrink-0 items-center justify-center rounded-blob rounded-bl-md bg-paper">
+          <Art name={art} className="h-10 w-10" />
+        </span>
+      ) : null}
+      <div className="min-w-0">
+        <h1 className="animate-slide-up font-display text-4xl leading-tight font-bold text-balance text-paper">
+          {text}
+        </h1>
+        {klein ? <p className="mt-1.5 text-base text-paper/75">{klein}</p> : null}
+      </div>
     </div>
   );
 }
@@ -453,20 +460,22 @@ function Antworten({
   onWahl: (index: number) => void;
 }) {
   return (
-    <div className="grid flex-1 grid-cols-3 gap-2 pb-1">
-      {optionen.map((option, index) => (
-        <button
-          key={option.label}
-          type="button"
-          onClick={() => onWahl(index)}
-          className="flex h-full min-h-[28vh] flex-col items-center justify-center gap-3 rounded-blob bg-paper p-2 shadow-[0_5px_0_var(--color-kid-dark)] transition active:translate-y-[4px] active:shadow-[0_1px_0_var(--color-kid-dark)]"
-        >
-          <Art name={option.art} className="h-20 w-20" />
-          <span className="text-center text-sm leading-tight font-bold text-ink-soft">
-            {option.label}
-          </span>
-        </button>
-      ))}
+    <div className="flex flex-1 items-start pb-1">
+      <div className="grid w-full grid-cols-3 gap-2">
+        {optionen.map((option, index) => (
+          <button
+            key={option.label}
+            type="button"
+            onClick={() => onWahl(index)}
+            className="flex min-h-[38vh] flex-col items-center justify-center gap-3 rounded-blob bg-paper p-2 shadow-[0_5px_0_var(--color-kid-dark)] transition active:translate-y-[4px] active:shadow-[0_1px_0_var(--color-kid-dark)]"
+          >
+            <Art name={option.art} className="h-24 w-24" />
+            <span className="text-center text-sm leading-tight font-bold text-ink-soft">
+              {option.label}
+            </span>
+          </button>
+        ))}
+      </div>
     </div>
   );
 }

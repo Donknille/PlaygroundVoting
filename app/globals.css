@@ -36,6 +36,23 @@
   --color-bark: #8b6b45;
   --color-bark-soft: #ece0cf;
 
+  /* ---------------------------------------------------------------
+     Illustrationspalette — nur für die Zeichnungen, nicht für die
+     Oberfläche. Die vier Entwurfsfarben reichen für Knöpfe, Flächen und
+     Urteile; den Antwortbildern im Kinder-Modus nehmen sie aber die
+     Unterscheidbarkeit: „Ja, lustig" und „Superlustig" landeten auf
+     demselben Gelb, Figuren und Kindergruppen alle auf demselben Blau.
+     Diese Töne sind deshalb den Bildzeichen vorbehalten.
+     --------------------------------------------------------------- */
+  --color-yolk: #ffc933;
+  --color-mandarine: #ff8c1a;
+  --color-plum: #7c4dff;
+  --color-plum-deep: #5a2fd0;
+  --color-berry: #ff4f96;
+  --color-berry-soft: #ffdcec;
+  --color-mint: #0fbfa4;
+  --color-sand-deep: #ffe3bb;
+
   /* Kinder-Modus: eigener Look, dunkles Blau über den ganzen Bildschirm. */
   --color-kid: #1f6fb2;
   --color-kid-light: #2c77b5;

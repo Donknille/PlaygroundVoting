@@ -151,14 +151,14 @@ const ART: Record<PictogramName, React.ReactNode> = {
         strokeWidth="2.3"
         strokeLinecap="round"
       />
-      <circle cx="16" cy="4.5" r="2.6" fill="var(--color-sky)" />
+      <circle cx="16" cy="4.5" r="2.6" fill="var(--color-plum)" />
       {GROUND}
     </>
   ),
 
   sand: (
     <>
-      <path d="M3 27c3.5-8 22.5-8 26 0z" fill="var(--color-sun)" />
+      <path d="M3 27c3.5-8 22.5-8 26 0z" fill="var(--color-yolk)" />
       <path d="M11.5 13.5h9.5l-1.5 9.5h-6.5z" fill="var(--color-coral)" />
       <path
         d="M12.5 13a3.8 3.8 0 017.5 0"
@@ -176,8 +176,8 @@ const ART: Record<PictogramName, React.ReactNode> = {
         d="M16 3.5c4.4 6.5 6.6 9.3 6.6 12.4a6.6 6.6 0 11-13.2 0C9.4 12.8 11.6 10 16 3.5z"
         fill="var(--color-sky)"
       />
-      <circle cx="7" cy="23" r="2.6" fill="var(--color-sky-deep)" />
-      <circle cx="25" cy="22" r="2.1" fill="var(--color-sky-deep)" />
+      <circle cx="7" cy="23" r="2.6" fill="var(--color-mint)" />
+      <circle cx="25" cy="22" r="2.1" fill="var(--color-mint)" />
     </>
   ),
 
@@ -204,7 +204,7 @@ const ART: Record<PictogramName, React.ReactNode> = {
         strokeWidth="1.7"
         strokeLinecap="round"
       />
-      <rect x="12.5" y="11" width="7.5" height="4.2" rx="2.1" fill="var(--color-sky)" />
+      <rect x="12.5" y="11" width="7.5" height="4.2" rx="2.1" fill="var(--color-plum)" />
       <path
         d="M16.3 15.2v4"
         stroke="var(--color-ink-soft)"
@@ -246,8 +246,8 @@ const ART: Record<PictogramName, React.ReactNode> = {
         strokeLinejoin="round"
         fill="none"
       />
-      <ellipse cx="16" cy="18.5" rx="12" ry="5" fill="var(--color-sky-deep)" />
-      <ellipse cx="16" cy="17" rx="12" ry="5" fill="var(--color-sky)" />
+      <ellipse cx="16" cy="18.5" rx="12" ry="5" fill="var(--color-plum-deep)" />
+      <ellipse cx="16" cy="17" rx="12" ry="5" fill="var(--color-plum)" />
       <path
         d="M6 20l-1.5 7M26 20l1.5 7"
         stroke="var(--color-ink-soft)"
@@ -302,10 +302,10 @@ const ART: Record<PictogramName, React.ReactNode> = {
         strokeWidth="2.6"
         strokeLinecap="round"
       />
-      <path d="M9.5 15a6.5 6.5 0 0113 0z" fill="var(--color-sun)" />
+      <path d="M9.5 15a6.5 6.5 0 0113 0z" fill="var(--color-yolk)" />
       <path
         d="M16 3.5v3.5M6.5 7l2.2 2.2M25.5 7l-2.2 2.2"
-        stroke="var(--color-sun)"
+        stroke="var(--color-yolk)"
         strokeWidth="2.2"
         strokeLinecap="round"
       />
@@ -314,8 +314,8 @@ const ART: Record<PictogramName, React.ReactNode> = {
 
   kleinkind: (
     <>
-      <rect x="12.5" y="3.5" width="7" height="3.6" rx="1.8" fill="var(--color-coral)" />
-      <rect x="10.5" y="7" width="11" height="3.4" rx="1.7" fill="var(--color-coral-soft)" />
+      <rect x="12.5" y="3.5" width="7" height="3.6" rx="1.8" fill="var(--color-berry)" />
+      <rect x="10.5" y="7" width="11" height="3.4" rx="1.7" fill="var(--color-berry-soft)" />
       <rect x="11" y="10.5" width="10" height="17.5" rx="4.5" fill="var(--color-sky-soft)" />
       <path d="M11 19h10v5a4.5 4.5 0 01-4.5 4h-1A4.5 4.5 0 0111 24z" fill="var(--color-sky)" />
     </>
@@ -323,7 +323,7 @@ const ART: Record<PictogramName, React.ReactNode> = {
 
   krabbler: (
     <>
-      <circle cx="16" cy="12" r="9" fill="var(--color-coral)" />
+      <circle cx="16" cy="12" r="9" fill="var(--color-berry)" />
       <circle cx="12.5" cy="9.5" r="1.9" fill="#fff" />
       <circle cx="18.5" cy="14" r="1.9" fill="#fff" />
       <rect x="13.4" y="20" width="5.2" height="8" rx="2.6" fill="var(--color-sun)" />
@@ -362,7 +362,7 @@ const ART: Record<PictogramName, React.ReactNode> = {
     <>
       <path
         d="M4.5 16h23"
-        stroke="var(--color-sky)"
+        stroke="var(--color-plum)"
         strokeWidth="4.6"
         strokeLinecap="round"
       />
@@ -436,7 +436,7 @@ const ART: Record<PictogramName, React.ReactNode> = {
       <circle cx="16" cy="7.5" r="4.2" fill="var(--color-sun)" />
       <path
         d="M16 12v9M16 21l-3.5 6.5M16 21l3.5 6.5M11 16.5h10"
-        stroke="var(--color-sky)"
+        stroke="var(--color-plum)"
         strokeWidth="2.8"
         strokeLinecap="round"
       />
@@ -448,7 +448,7 @@ const ART: Record<PictogramName, React.ReactNode> = {
       <circle cx="16" cy="9" r="4.2" fill="var(--color-sun)" />
       <path
         d="M16 13.5v6.5M16 20l-4.5 5.5M16 20l4.5 5.5M16 15.5l-5.5-4.5M16 15.5l5.5-4.5"
-        stroke="var(--color-sky)"
+        stroke="var(--color-plum)"
         strokeWidth="2.8"
         strokeLinecap="round"
       />
@@ -461,34 +461,34 @@ const ART: Record<PictogramName, React.ReactNode> = {
       <circle cx="11.5" cy="9" r="4.2" fill="var(--color-sun)" />
       <path
         d="M11.5 13.5l5.5 4M11.5 13.5L8 22M17 17.5l2.5 6.5M11.5 13.5L5 10"
-        stroke="var(--color-sky)"
+        stroke="var(--color-plum)"
         strokeWidth="2.8"
         strokeLinecap="round"
       />
     </>
   ),
 
-  "kind-eins": <Kid x={16} y={11} color="var(--color-sky)" />,
+  "kind-eins": <Kid x={16} y={11} color="var(--color-plum)" />,
 
   "kind-paar": (
     <>
-      <Kid x={10} y={12} color="var(--color-sky)" />
-      <Kid x={22} y={12} color="var(--color-coral)" />
+      <Kid x={10} y={12} color="var(--color-plum)" />
+      <Kid x={22} y={12} color="var(--color-berry)" />
     </>
   ),
 
   "kind-viele": (
     <>
       <Kid x={7.5} y={9} color="var(--color-sky)" />
-      <Kid x={18.5} y={8} color="var(--color-coral)" />
-      <Kid x={13} y={18} color="var(--color-sky)" />
+      <Kid x={18.5} y={8} color="var(--color-berry)" />
+      <Kid x={13} y={18} color="var(--color-plum)" />
       <Kid x={24} y={17} color="var(--color-grass)" />
     </>
   ),
 
   sonne: (
     <>
-      <circle cx="16" cy="16" r="7.5" fill="var(--color-sun)" />
+      <circle cx="16" cy="16" r="7.5" fill="var(--color-yolk)" />
       <path
         d="M16 2.5v3.5M16 26v3.5M2.5 16h3.5M26 16h3.5M6.4 6.4l2.5 2.5M23.1 23.1l2.5 2.5M25.6 6.4l-2.5 2.5M8.9 23.1l-2.5 2.5"
         stroke="var(--color-sun)"
@@ -500,7 +500,7 @@ const ART: Record<PictogramName, React.ReactNode> = {
 
   halbschatten: (
     <>
-      <circle cx="11.5" cy="11.5" r="6.5" fill="var(--color-sun)" />
+      <circle cx="11.5" cy="11.5" r="6.5" fill="var(--color-yolk)" />
       <path
         d="M11.5 2.5v2.5M2.5 11.5h2.5M5.1 5.1l1.8 1.8"
         stroke="var(--color-sun)"
@@ -526,16 +526,16 @@ const ART: Record<PictogramName, React.ReactNode> = {
         fill="none"
         strokeLinecap="round"
       />
-      <circle cx="4" cy="8" r="1.9" fill="var(--color-sun)" />
+      <circle cx="4" cy="8" r="1.9" fill="var(--color-yolk)" />
       <circle cx="28.5" cy="6" r="1.7" fill="var(--color-grass)" />
-      <circle cx="27.5" cy="27" r="1.7" fill="var(--color-coral)" />
+      <circle cx="27.5" cy="27" r="1.7" fill="var(--color-berry)" />
     </>
   ),
 
   stern: (
     <path
       d="M16 3l3.9 8.3 8.6 1.2-6.3 6.3 1.5 9-7.7-4.3-7.7 4.3 1.5-9L3.5 12.5l8.6-1.2z"
-      fill="var(--color-sun)"
+      fill="var(--color-yolk)"
     />
   ),
 
@@ -543,7 +543,7 @@ const ART: Record<PictogramName, React.ReactNode> = {
     <>
       <path d="M10 3l4 10h-6z" fill="var(--color-sky)" />
       <path d="M22 3l-2 10h6z" fill="var(--color-coral)" />
-      <circle cx="16" cy="20.5" r="9" fill="var(--color-sun)" />
+      <circle cx="16" cy="20.5" r="9" fill="var(--color-yolk)" />
       <circle cx="16" cy="20.5" r="5.5" fill="var(--color-sun)" />
     </>
   ),
@@ -553,8 +553,8 @@ const ART: Record<PictogramName, React.ReactNode> = {
       <rect x="12.5" y="8" width="7" height="9" rx="2" fill="var(--color-bark)" />
       <rect x="4" y="5" width="7.5" height="7" rx="2" fill="var(--color-ink-soft)" />
       <rect x="20.5" y="5" width="7.5" height="7" rx="2" fill="var(--color-ink-soft)" />
-      <circle cx="8.5" cy="20" r="7" fill="var(--color-sky)" />
-      <circle cx="23.5" cy="20" r="7" fill="var(--color-sky)" />
+      <circle cx="8.5" cy="20" r="7" fill="var(--color-plum)" />
+      <circle cx="23.5" cy="20" r="7" fill="var(--color-plum)" />
       <circle cx="8.5" cy="20" r="3.4" fill="var(--color-sky-soft)" />
       <circle cx="23.5" cy="20" r="3.4" fill="var(--color-sky-soft)" />
     </>
@@ -568,7 +568,7 @@ const ART: Record<PictogramName, React.ReactNode> = {
       />
       <path
         d="M9.4 19h13.2l2.9 4.5a3 3 0 01-2.6 4.5H9.1a3 3 0 01-2.6-4.5z"
-        fill="var(--color-sky-deep)"
+        fill="var(--color-mint)"
       />
       <rect x="11.5" y="2.5" width="9" height="3" rx="1.5" fill="var(--color-ink-soft)" />
     </>
@@ -577,7 +577,7 @@ const ART: Record<PictogramName, React.ReactNode> = {
   rathaus: (
     <>
       <path d="M16 3l13 7.5H3z" fill="var(--color-coral)" />
-      <rect x="5" y="10.5" width="22" height="14" fill="var(--color-line)" />
+      <rect x="5" y="10.5" width="22" height="14" fill="var(--color-sand-deep)" />
       <rect x="8" y="14" width="3.5" height="10.5" fill="var(--color-ink-soft)" />
       <rect x="14.25" y="14" width="3.5" height="10.5" fill="var(--color-ink-soft)" />
       <rect x="20.5" y="14" width="3.5" height="10.5" fill="var(--color-ink-soft)" />
@@ -608,7 +608,7 @@ const ART: Record<PictogramName, React.ReactNode> = {
         width="27"
         height="12"
         rx="3"
-        fill="var(--color-sun)"
+        fill="var(--color-yolk)"
         transform="rotate(-8 16 16)"
       />
       <path
